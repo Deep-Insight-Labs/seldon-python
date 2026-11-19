@@ -4,10 +4,21 @@ import json
 import os
 import subprocess
 import sys
+import tarfile
 import tempfile
+import zipfile
 from pathlib import Path
 
 wheel = Path(sys.argv[1]).resolve()
+with zipfile.ZipFile(wheel) as artifact:
+    names = artifact.namelist()
+    assert any(name.endswith(".dist-info/licenses/LICENSE") for name in names)
+    assert "seldon_sdk/py.typed" in names
+    assert "seldon_sdk/skill/SKILL.md" in names
+    assert all(name.startswith("seldon_sdk/") or ".dist-info/" in name for name in names)
+for sdist in wheel.parent.glob("*.tar.gz"):
+    with tarfile.open(sdist) as artifact:
+        assert any(name.endswith("/LICENSE") for name in artifact.getnames())
 with tempfile.TemporaryDirectory(prefix="seldon-sdk-artifact-") as temporary:
     root = Path(temporary)
     environment = root / "environment"

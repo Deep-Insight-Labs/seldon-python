@@ -203,15 +203,26 @@ def validate_source(source):
 
 
 def resolve_function(locator, lockfile=None):
+    if not isinstance(locator, str):
+        raise SeldonContractError("function_identity_required")
     if locator.startswith("seldon/function/"):
         locator = locator[len("seldon/function/") :]
     try:
         return str(UUID(locator))
     except (ValueError, TypeError):
-        if lockfile:
-            entry = read_json(lockfile).get("functions", {}).get(locator)
-            if entry:
-                return resolve_function(entry.get("function_id", ""))
+        from .lockfile import locate
+
+        path = Path(lockfile) if lockfile else locate(None)
+        if path.exists():
+            value = read_json(path)
+            if isinstance(value, dict) and value.get("version") == "seldon-lock-v1":
+                entries = value.get("functions", {})
+                entry = entries.get(locator) if isinstance(entries, dict) else None
+                if isinstance(entry, dict):
+                    try:
+                        return str(UUID(entry.get("function_id", "")))
+                    except (ValueError, TypeError, AttributeError):
+                        pass
         raise SeldonContractError("function_identity_required") from None
 
 

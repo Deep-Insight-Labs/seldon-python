@@ -19,4 +19,5 @@ jobs:
       - run: python -m mypy scripts/typecheck_example.py --strict
       - run: python -m pytest -q
       - run: python -m build
+      - run: python -m twine check dist/*
       - run: python scripts/verify_wheel.py dist/*.whl

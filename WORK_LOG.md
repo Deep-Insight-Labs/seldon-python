@@ -103,3 +103,21 @@ Final wheel rebuilt after the approval and bounded-file-read changes: both fresh
 installed environments (Python3.10.19/Pydantic2.11.0 and
 Python3.13.15/Pydantic2.14.3) pass all38 tests. Local Ruff and public strict typing
 checks pass. No editable SDK installation is used by those two artifact suites.
+
+## 2026-11-19 — final preparation/report hardening
+
+The AC audit found that command key locators did not consult the shared lockfile.
+They now resolve the nearest/SELDON_LOCKFILE mapping without module imports and
+reject malformed self-references without recursion. Reports preserve selected run,
+contract digest, diagnostics and serving state; source import returns the actual
+server digest and reuses unchanged identity. Offline preview includes destination.
+Three added regression tests bring the suite to41 passing. Public strict consumer
+typing, Ruff/format, build, twine and fresh Python3.10 base-wheel console/offline/
+typed-stub checks pass. Artifact assertions now check license files and prohibit
+fixture/test payload in the wheel. CI runs those packaging checks.
+
+The Seldon QA work log lists remaining compound ACs explicitly: public publication,
+issued WorkOS login/logout, complete invalid corpus/provenance, internal strict
+typing and exhaustive performance/retry/concurrency/scanner matrices. Human-timed
+baseline and provider quality/savings remain unmeasured. Actual owning-application
+local Runner success/fallback/raise is not covered by the hosted Vector rehearsal.

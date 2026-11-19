@@ -14,7 +14,7 @@ dependencies = ["httpx>=0.27,<1", "pydantic>=2.11,<3"]
 [project.optional-dependencies]
 login = ["keyring>=25,<26"]
 local = ["seldon-runtime>=0.1.1.dev0"]
-dev = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.8", "build>=1", "mypy>=1.15"]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.8", "build>=1", "mypy>=1.15", "twine>=6"]
 
 [project.scripts]
 seldon = "seldon_sdk.cli:main"

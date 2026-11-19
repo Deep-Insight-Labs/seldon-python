@@ -241,6 +241,7 @@ def main(argv=None, *, login=None, interactive=None, confirm=None):
             emit(
                 {
                     "status": "validated_offline",
+                    "destination": base_url(args.base_url) + "/v1/seldon/functions",
                     "source_file": args.source,
                     "source_digest": digest(source),
                     "fields": sorted(source) if isinstance(source, dict) else ["calls"],

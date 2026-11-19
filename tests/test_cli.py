@@ -33,6 +33,7 @@ def test_offline_import_is_zero_network_and_preserves_payload(tmp_path, capsys):
     assert main(["import", "--source", str(path), "--offline"], login=session) == 0
     output = capsys.readouterr().out
     assert "validated_offline" in output
+    assert json.loads(output)["destination"].endswith("/v1/seldon/functions")
     assert "private prompt" not in output
 
 
@@ -143,3 +144,99 @@ def test_managed_fallback_approval_is_explicit_and_confirmed(tmp_path):
         )
         assert code == 0 and result["id"] == function
         assert sent[-1]["managed_fallback_approved"] is True
+
+
+def test_key_locator_uses_nearest_lock_without_imports_and_rejects_cycles(tmp_path, monkeypatch):
+    from seldon_sdk.errors import SeldonContractError
+    from seldon_sdk.files import resolve_function
+
+    identity = str(uuid4())
+    lock = tmp_path / "seldon.lock.json"
+    lock.write_text(
+        json.dumps(
+            {
+                "version": "seldon-lock-v1",
+                "functions": {
+                    "classify": {"function_id": identity},
+                    "cycle": {"function_id": "cycle"},
+                },
+            }
+        )
+    )
+    nested = tmp_path / "application"
+    nested.mkdir()
+    monkeypatch.chdir(nested)
+    monkeypatch.delenv("SELDON_LOCKFILE", raising=False)
+    assert resolve_function("classify") == identity
+    with pytest.raises(SeldonContractError, match="function_identity_required"):
+        resolve_function("cycle")
+    override = tmp_path / "alternate.json"
+    other = str(uuid4())
+    override.write_text(
+        json.dumps({"version": "seldon-lock-v1", "functions": {"classify": {"function_id": other}}})
+    )
+    monkeypatch.setenv("SELDON_LOCKFILE", str(override))
+    assert resolve_function("classify") == other
+
+
+def test_report_preserves_selected_evidence_without_source_content(tmp_path, capsys):
+    identity, workspace, run = str(uuid4()), str(uuid4()), str(uuid4())
+    evidence = {"coverage": "uploaded", "limitations": ["synthetic provider"]}
+
+    def handler(request):
+        assert request.url.params["run_id"] == run
+        return httpx.Response(
+            200,
+            json={
+                "id": identity,
+                "workspace_id": workspace,
+                "revision": 7,
+                "selected_run_id": run,
+                "selected_contract_digest": "a" * 64,
+                "diagnostics": evidence,
+                "serving_state": "reference",
+                "runs": [{"id": run}],
+                "source": {"prompt": "private sentinel"},
+            },
+        )
+
+    assert (
+        main(
+            ["--association", str(tmp_path / "operation.json"), "report", identity, "--run", run],
+            login=Session(handler),
+        )
+        == 0
+    )
+    output = capsys.readouterr().out
+    result = json.loads(output)
+    assert result["diagnostics"] == evidence
+    assert result["selected_run_id"] == run
+    assert result["serving_state"] == "reference"
+    assert "private sentinel" not in output
+
+
+def test_source_import_returns_authoritative_contract_and_reuses_identity(tmp_path):
+    from seldon_sdk.management import Management
+
+    identity, workspace = str(uuid4()), str(uuid4())
+    path = request_source(tmp_path)
+    calls = []
+    detail = {
+        "id": identity,
+        "workspace_id": workspace,
+        "revision": 4,
+        "selected_contract_digest": "a" * 64,
+    }
+
+    def handler(request):
+        calls.append(request)
+        if request.method == "POST":
+            assert json.loads(request.content)["source"] == json.loads(path.read_text())
+        return httpx.Response(200, json=detail)
+
+    api = Management(Session(handler), association=tmp_path / "operation.json")
+    assert api.import_source(path)["contract_digest"] == "a" * 64
+    unchanged = api.import_source(path, function=identity)
+    assert unchanged["status"] == "unchanged"
+    assert unchanged["contract_digest"] == "a" * 64
+    assert [request.method for request in calls] == ["POST", "GET"]

@@ -102,7 +102,12 @@ class Management:
             detail = self.detail(function)
             if state.get("function_id") == function and state.get("source_digest") == source_digest:
                 if state.get("revision") == detail.get("revision"):
-                    return {**preview, "function_id": function, "status": "unchanged"}
+                    return {
+                        **preview,
+                        "function_id": function,
+                        "status": "unchanged",
+                        "contract_digest": detail.get("selected_contract_digest"),
+                    }
             body["expected_revision"] = detail["revision"]
             result = self.request("PATCH", FUNCTIONS + "/" + function, body)
         else:
@@ -135,6 +140,7 @@ class Management:
             "function_id": identity,
             "revision": result["revision"],
             "status": "imported",
+            "contract_digest": result.get("selected_contract_digest"),
             "preview_issues": [
                 {"code": safe_code(item.get("code"))} for item in result.get("preview_issues", [])
             ],
@@ -176,7 +182,15 @@ class Management:
     def _summary(detail):
         return {
             key: detail.get(key)
-            for key in ("id", "revision", "active_revision", "status", "disabled", "requests_7d")
+            for key in (
+                "id",
+                "revision",
+                "active_revision",
+                "status",
+                "disabled",
+                "requests_7d",
+                "serving_state",
+            )
         }
 
     def report(self, function, *, run_id=None):
@@ -191,6 +205,10 @@ class Management:
             "revision": detail["revision"],
             "run_id": run_id,
             "alternatives": detail.get("alternatives", []),
+            "selected_run_id": detail.get("selected_run_id"),
+            "selected_contract_digest": detail.get("selected_contract_digest"),
+            "diagnostics": detail.get("diagnostics", {}),
+            "serving_state": detail.get("serving_state"),
             "runs": [
                 run for run in detail.get("runs", []) if run_id is None or str(run["id"]) == run_id
             ],

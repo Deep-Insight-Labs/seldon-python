@@ -15,3 +15,9 @@
 - Use argparse, httpx and Pydantic instead of adding a parallel CLI/auth/agent
   framework. Structured output uses the constant schema name `output` so renaming
   a function cannot alter its behavior digest.
+
+- Resolve Function keys from the nearest explicit lockfile for every targeted CLI
+  command, rejecting malformed recursive mappings. Preserve authoritative selected
+  contract/run diagnostics in reports and source-import results. Offline source
+  previews identify the upload destination. Verify license and contents on built
+  wheel/sdist artifacts.
