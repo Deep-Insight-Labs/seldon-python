@@ -1,0 +1,6084 @@
+{
+  "cases": [
+    {
+      "expected_contract_digest": "e8d1cfd5e2ae71233ae122ccfd2687b38c7cc9ba239edc8fce125e77ec3a1811",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Consider plain",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value plain",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 0,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          },
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Consider {x}",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "string"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": "plain"
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "e8d1cfd5e2ae71233ae122ccfd2687b38c7cc9ba239edc8fce125e77ec3a1811",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "4e300db1fa32c9b08cd15d1b63fd8004e22ddf47fe2f677d515d42ae4ebe4fba",
+      "name": "case_0",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "string"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Consider {x}",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "e8d1cfd5e2ae71233ae122ccfd2687b38c7cc9ba239edc8fce125e77ec3a1811",
+        "example_inputs": {
+          "x": "plain"
+        },
+        "key": "synthetic:case_0",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value Unicode: café 東京",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "string"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": "Unicode: café 東京"
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "1ef415b14a09e2ed66843603d68c2066ab6921bc3451d1658203c8c637d31818",
+      "name": "case_1",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "string"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+        "example_inputs": {
+          "x": "Unicode: café 東京"
+        },
+        "key": "synthetic:case_1",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value quote \" and slash \\",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "string"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": "quote \" and slash \\"
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "652a4c8b60de94ca318a42ade3012007a258d14b5b0f78c76dc75670a815a5fb",
+      "name": "case_2",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "string"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+        "example_inputs": {
+          "x": "quote \" and slash \\"
+        },
+        "key": "synthetic:case_2",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value line1\nline2\tend",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "string"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": "line1\nline2\tend"
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "b2cf9997037fc6430a0161ec85f1ea33a9dd3ba9bdba3b9a48479f28d5e6f95d",
+      "name": "case_3",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "string"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+        "example_inputs": {
+          "x": "line1\nline2\tend"
+        },
+        "key": "synthetic:case_3",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value {braces} {{inside}}",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "string"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": "{braces} {{inside}}"
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "4482927eecd9a0a51696324deab2ea730ab7cec0eb2eecb3bea08a7b33c7470a",
+      "name": "case_4",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "string"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+        "example_inputs": {
+          "x": "{braces} {{inside}}"
+        },
+        "key": "synthetic:case_4",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value ",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "string"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": ""
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "64150aaed2450c533127a138cc60c580c3c81c85f2361406521ecf5c0741bdf2",
+      "name": "case_5",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "string"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "2044e32d844b99e2e7a7da0d9368af43020a8bdde02d3e7f6921365ce5d28851",
+        "example_inputs": {
+          "x": ""
+        },
+        "key": "synthetic:case_5",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "918279d667735048d8bda116d063898afbc1a171da66142c4dd6dcdd6d7eadee",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value true",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": true
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "918279d667735048d8bda116d063898afbc1a171da66142c4dd6dcdd6d7eadee",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "ed516deef3c284df1e0a7a67796ae799519f6a5b2a0442e8cb1d78f2e50aefb4",
+      "name": "case_6",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "918279d667735048d8bda116d063898afbc1a171da66142c4dd6dcdd6d7eadee",
+        "example_inputs": {
+          "x": true
+        },
+        "key": "synthetic:case_6",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "c4eda75b25f37cd0df5324394909250ec5c3c767b0e958f0c283341df3033c02",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Consider false",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value false",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 0,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          },
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Consider {x}",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": false
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "c4eda75b25f37cd0df5324394909250ec5c3c767b0e958f0c283341df3033c02",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "7f57102cd1fadcababd7c939cc62d7b89aae5fa28ca5fe50a43d5658cba1efca",
+      "name": "case_7",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Consider {x}",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "c4eda75b25f37cd0df5324394909250ec5c3c767b0e958f0c283341df3033c02",
+        "example_inputs": {
+          "x": false
+        },
+        "key": "synthetic:case_7",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "f4883208dac2b1f31716535d1cbfd1ded8b42e22a4b47db7cf6e0fbefa2b0ff6",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value 0",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": 0
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "f4883208dac2b1f31716535d1cbfd1ded8b42e22a4b47db7cf6e0fbefa2b0ff6",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "dd471ad84dffbda5c40520cf4f9637a5063024870b6ac9aac0ef453a94916280",
+      "name": "case_8",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "f4883208dac2b1f31716535d1cbfd1ded8b42e22a4b47db7cf6e0fbefa2b0ff6",
+        "example_inputs": {
+          "x": 0
+        },
+        "key": "synthetic:case_8",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "f4883208dac2b1f31716535d1cbfd1ded8b42e22a4b47db7cf6e0fbefa2b0ff6",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value -123",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": -123
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "f4883208dac2b1f31716535d1cbfd1ded8b42e22a4b47db7cf6e0fbefa2b0ff6",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "e69bffc3124f39e5b68a4de9eae4fe52a5220247ecfa54f7cf524cff916ed202",
+      "name": "case_9",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "f4883208dac2b1f31716535d1cbfd1ded8b42e22a4b47db7cf6e0fbefa2b0ff6",
+        "example_inputs": {
+          "x": -123
+        },
+        "key": "synthetic:case_9",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "f4883208dac2b1f31716535d1cbfd1ded8b42e22a4b47db7cf6e0fbefa2b0ff6",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value 9007199254740991",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": 9007199254740991
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "f4883208dac2b1f31716535d1cbfd1ded8b42e22a4b47db7cf6e0fbefa2b0ff6",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "b29d5d083f0f9d98ebf3cafe3a385f03135fd11302ff05ac7b3ab7b4463b9772",
+      "name": "case_10",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "f4883208dac2b1f31716535d1cbfd1ded8b42e22a4b47db7cf6e0fbefa2b0ff6",
+        "example_inputs": {
+          "x": 9007199254740991
+        },
+        "key": "synthetic:case_10",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "b9b9fdfce997465dbb2e314c6d70cd59d294c0326651080d1eefb32e11c9e46f",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value 0.0",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "number"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": 0.0
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "b9b9fdfce997465dbb2e314c6d70cd59d294c0326651080d1eefb32e11c9e46f",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "719c4f759b91a782122c05e725c5efe40bb03753f63969c394d6f73c79880f94",
+      "name": "case_11",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "number"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "b9b9fdfce997465dbb2e314c6d70cd59d294c0326651080d1eefb32e11c9e46f",
+        "example_inputs": {
+          "x": 0.0
+        },
+        "key": "synthetic:case_11",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "b9b9fdfce997465dbb2e314c6d70cd59d294c0326651080d1eefb32e11c9e46f",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value -0.0",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "number"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": -0.0
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "b9b9fdfce997465dbb2e314c6d70cd59d294c0326651080d1eefb32e11c9e46f",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "fc707b0e0460a829ea860e31cde6262fb7cd7a126e6db7e825ad248fd89ec188",
+      "name": "case_12",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "number"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "b9b9fdfce997465dbb2e314c6d70cd59d294c0326651080d1eefb32e11c9e46f",
+        "example_inputs": {
+          "x": -0.0
+        },
+        "key": "synthetic:case_12",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "b9b9fdfce997465dbb2e314c6d70cd59d294c0326651080d1eefb32e11c9e46f",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value 1e+30",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "number"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": 1e+30
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "b9b9fdfce997465dbb2e314c6d70cd59d294c0326651080d1eefb32e11c9e46f",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "8a8c54080f2b3b13251e078392b04772f40a225519e4c5e14290421cbae73581",
+      "name": "case_13",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "number"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "b9b9fdfce997465dbb2e314c6d70cd59d294c0326651080d1eefb32e11c9e46f",
+        "example_inputs": {
+          "x": 1e+30
+        },
+        "key": "synthetic:case_13",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "ef045597c58f8d1b0ceefdb1bd0de3ed3a4e381bfa27ce880e11add90e110201",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Consider 1e-12",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value 1e-12",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 0,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          },
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Consider {x}",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "number"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": 1e-12
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "ef045597c58f8d1b0ceefdb1bd0de3ed3a4e381bfa27ce880e11add90e110201",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "42b62b15d9f34db38277fa21e7fecbc6f17b6822d5e334a4a75af7e8b5e7c12f",
+      "name": "case_14",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "number"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Consider {x}",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "ef045597c58f8d1b0ceefdb1bd0de3ed3a4e381bfa27ce880e11add90e110201",
+        "example_inputs": {
+          "x": 1e-12
+        },
+        "key": "synthetic:case_14",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "226c95705b2149304f7ace59107450a0a62b9c1ebd735f8a8ea9554d4c0e5acc",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value null",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": null
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "226c95705b2149304f7ace59107450a0a62b9c1ebd735f8a8ea9554d4c0e5acc",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "c17036f4ebc082cfbc20243849a8e7abd6406dcc674702a679006233edf3ddac",
+      "name": "case_15",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "X"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "226c95705b2149304f7ace59107450a0a62b9c1ebd735f8a8ea9554d4c0e5acc",
+        "example_inputs": {
+          "x": null
+        },
+        "key": "synthetic:case_15",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "226c95705b2149304f7ace59107450a0a62b9c1ebd735f8a8ea9554d4c0e5acc",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value present",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": "present"
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "226c95705b2149304f7ace59107450a0a62b9c1ebd735f8a8ea9554d4c0e5acc",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "00bb96d1d5e7927b704d66b62aa3af528ad167f2322f877f27797bac34eb1503",
+      "name": "case_16",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "X"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "226c95705b2149304f7ace59107450a0a62b9c1ebd735f8a8ea9554d4c0e5acc",
+        "example_inputs": {
+          "x": "present"
+        },
+        "key": "synthetic:case_16",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "5b4b6b67d54a4523a86da9691d64a0d14ef39f2ad746277fb566cdab890578de",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value null",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": null
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "5b4b6b67d54a4523a86da9691d64a0d14ef39f2ad746277fb566cdab890578de",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "d10092018024f9b25fc5a3348434f1fef1d736fbda63254535ee43091d4a66e2",
+      "name": "case_17",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "X"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "5b4b6b67d54a4523a86da9691d64a0d14ef39f2ad746277fb566cdab890578de",
+        "example_inputs": {
+          "x": null
+        },
+        "key": "synthetic:case_17",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "eb8ac564184663e902d8be79582b76dda3f7577f7338a41f77dbd9ebd85e56aa",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value [\"one\",\"two\"]",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "items": {
+                "type": "string"
+              },
+              "title": "X",
+              "type": "array"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": [
+            "one",
+            "two"
+          ]
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "eb8ac564184663e902d8be79582b76dda3f7577f7338a41f77dbd9ebd85e56aa",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "36485147310d9c2c8153e7cb442510fc38658d26a782b70f69b6148748f576a2",
+      "name": "case_18",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "X",
+                "type": "array"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "eb8ac564184663e902d8be79582b76dda3f7577f7338a41f77dbd9ebd85e56aa",
+        "example_inputs": {
+          "x": [
+            "one",
+            "two"
+          ]
+        },
+        "key": "synthetic:case_18",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "eb8ac564184663e902d8be79582b76dda3f7577f7338a41f77dbd9ebd85e56aa",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value []",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "items": {
+                "type": "string"
+              },
+              "title": "X",
+              "type": "array"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": []
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "eb8ac564184663e902d8be79582b76dda3f7577f7338a41f77dbd9ebd85e56aa",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "9436e3dbd19892be02da3512670e5e302f3359712182b78cf66668a87ab9aadb",
+      "name": "case_19",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "X",
+                "type": "array"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "eb8ac564184663e902d8be79582b76dda3f7577f7338a41f77dbd9ebd85e56aa",
+        "example_inputs": {
+          "x": []
+        },
+        "key": "synthetic:case_19",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "d7e2eb590e514ef2dc3258ce644251b930bbeb6d95ebea12213a18b10359113c",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value [1,2,-3]",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "items": {
+                "type": "integer"
+              },
+              "title": "X",
+              "type": "array"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": [
+            1,
+            2,
+            -3
+          ]
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "d7e2eb590e514ef2dc3258ce644251b930bbeb6d95ebea12213a18b10359113c",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "314a6daba71d520b268a94d495044f602ef9fad5bce5b3de5e1562f3aadfde62",
+      "name": "case_20",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "items": {
+                  "type": "integer"
+                },
+                "title": "X",
+                "type": "array"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "d7e2eb590e514ef2dc3258ce644251b930bbeb6d95ebea12213a18b10359113c",
+        "example_inputs": {
+          "x": [
+            1,
+            2,
+            -3
+          ]
+        },
+        "key": "synthetic:case_20",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "c7c5cd85793c7226de4b1f1d2798d5a4c2d157319d16c39461ad1ef4ccf879d8",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Consider {\"a\":1,\"z\":2}",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value {\"a\":1,\"z\":2}",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 0,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          },
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Consider {x}",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "title": "X",
+              "type": "object"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": {
+            "a": 1,
+            "z": 2
+          }
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "c7c5cd85793c7226de4b1f1d2798d5a4c2d157319d16c39461ad1ef4ccf879d8",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "72576251baa38d744a017ac58355c2b8d02c2b9788d329378a367f9056274879",
+      "name": "case_21",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "title": "X",
+                "type": "object"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Consider {x}",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "c7c5cd85793c7226de4b1f1d2798d5a4c2d157319d16c39461ad1ef4ccf879d8",
+        "example_inputs": {
+          "x": {
+            "a": 1,
+            "z": 2
+          }
+        },
+        "key": "synthetic:case_21",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "b3cee847258bb4eaf0e9bc49e9c9f69f92cc9c829ab3d015c34d11cfe8f0ac52",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value [true,false]",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "items": {
+                "type": "boolean"
+              },
+              "title": "X",
+              "type": "array"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": [
+            true,
+            false
+          ]
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "b3cee847258bb4eaf0e9bc49e9c9f69f92cc9c829ab3d015c34d11cfe8f0ac52",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "f87e3e1a724c3cdfb6dd2c9b7b634bfd2d2428aaae6873fc79bcc85d597291bb",
+      "name": "case_22",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "items": {
+                  "type": "boolean"
+                },
+                "title": "X",
+                "type": "array"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "b3cee847258bb4eaf0e9bc49e9c9f69f92cc9c829ab3d015c34d11cfe8f0ac52",
+        "example_inputs": {
+          "x": [
+            true,
+            false
+          ]
+        },
+        "key": "synthetic:case_22",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "97782834eedd30a64d38efd2cf88ec1e8d55d1b29ad5f093baac7f6119232c53",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value {\"x\":\"Unicode 雪\",\"y\":\"\\n\"}",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "title": "X",
+              "type": "object"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": {
+            "x": "Unicode 雪",
+            "y": "\n"
+          }
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "97782834eedd30a64d38efd2cf88ec1e8d55d1b29ad5f093baac7f6119232c53",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "4580dc4ad24dc424c0fe632b32359c0be34679e553328d8a076209c4450dad06",
+      "name": "case_23",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "title": "X",
+                "type": "object"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "97782834eedd30a64d38efd2cf88ec1e8d55d1b29ad5f093baac7f6119232c53",
+        "example_inputs": {
+          "x": {
+            "x": "Unicode 雪",
+            "y": "\n"
+          }
+        },
+        "key": "synthetic:case_23",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "e05d7cb47fcc08409cb0d058c60550f782a41ecae6dd049dc5e5875a3da34fff",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value 2026-01-02",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "format": "date",
+              "title": "X",
+              "type": "string"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": "2026-01-02"
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "e05d7cb47fcc08409cb0d058c60550f782a41ecae6dd049dc5e5875a3da34fff",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "bf4f76ab93a9a974ff55f097bf54091740e031281d85b177e8fef50bbda86d75",
+      "name": "case_24",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "format": "date",
+                "title": "X",
+                "type": "string"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "e05d7cb47fcc08409cb0d058c60550f782a41ecae6dd049dc5e5875a3da34fff",
+        "example_inputs": {
+          "x": "2026-01-02"
+        },
+        "key": "synthetic:case_24",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "b477160428b489ad30286d6254f3b2d0b70e1b76de348541d5709ad83ee073df",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value [[1],[2,3]]",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "items": {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              "title": "X",
+              "type": "array"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": [
+            [
+              1
+            ],
+            [
+              2,
+              3
+            ]
+          ]
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "b477160428b489ad30286d6254f3b2d0b70e1b76de348541d5709ad83ee073df",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "69621859278dcbc50b96c7b9701c3c87ba459bab2caa977ee666c358d8bc7c45",
+      "name": "case_25",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "items": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "title": "X",
+                "type": "array"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "b477160428b489ad30286d6254f3b2d0b70e1b76de348541d5709ad83ee073df",
+        "example_inputs": {
+          "x": [
+            [
+              1
+            ],
+            [
+              2,
+              3
+            ]
+          ]
+        },
+        "key": "synthetic:case_25",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "211020e42d1335b5584bb5d41d8e7560d8ad4bb8715cf9735709a08b9fc183d5",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value {\"x\":[\"a\",\"b\"]}",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "additionalProperties": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "title": "X",
+              "type": "object"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": {
+            "x": [
+              "a",
+              "b"
+            ]
+          }
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "211020e42d1335b5584bb5d41d8e7560d8ad4bb8715cf9735709a08b9fc183d5",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "41d51b70bd33c0605e7b2861b238427739f566a20ae5fbcb9f46917c58486352",
+      "name": "case_26",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "additionalProperties": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "title": "X",
+                "type": "object"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "211020e42d1335b5584bb5d41d8e7560d8ad4bb8715cf9735709a08b9fc183d5",
+        "example_inputs": {
+          "x": {
+            "x": [
+              "a",
+              "b"
+            ]
+          }
+        },
+        "key": "synthetic:case_26",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "b9b9fdfce997465dbb2e314c6d70cd59d294c0326651080d1eefb32e11c9e46f",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value 1.23456789",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "title": "X",
+              "type": "number"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": 1.23456789
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "b9b9fdfce997465dbb2e314c6d70cd59d294c0326651080d1eefb32e11c9e46f",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "7f9756f2fc6152072a63060db7dc7d17e53adf628b0778a7d99e348d8dc1e11f",
+      "name": "case_27",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "title": "X",
+                "type": "number"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "b9b9fdfce997465dbb2e314c6d70cd59d294c0326651080d1eefb32e11c9e46f",
+        "example_inputs": {
+          "x": 1.23456789
+        },
+        "key": "synthetic:case_27",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "0c7946aea10fdae761663a09cc87fac65d9545f60efa37d9ae15eee60576922a",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Consider [null,\"x\"]",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value [null,\"x\"]",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 0,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          },
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Consider {x}",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "title": "X",
+              "type": "array"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": [
+            null,
+            "x"
+          ]
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "0c7946aea10fdae761663a09cc87fac65d9545f60efa37d9ae15eee60576922a",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "fd1513eba5befb5f0c9bf738ae0860ed00758db41a18489e23e9d408c3ad1fce",
+      "name": "case_28",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "title": "X",
+                "type": "array"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Consider {x}",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "0c7946aea10fdae761663a09cc87fac65d9545f60efa37d9ae15eee60576922a",
+        "example_inputs": {
+          "x": [
+            null,
+            "x"
+          ]
+        },
+        "key": "synthetic:case_28",
+        "kind": "sdk"
+      }
+    },
+    {
+      "expected_contract_digest": "941ac697057b98df5256203c06ad70586b8a2cfc390e68c1b3a72a9c190c306c",
+      "expected_rendered": {
+        "max_tokens": 2048,
+        "messages": [
+          {
+            "content": "Fixed instructions",
+            "role": "system"
+          },
+          {
+            "content": "JSON {\"fixed\":1} Value {\"flag\":true}",
+            "role": "user"
+          }
+        ],
+        "response_format": {
+          "json_schema": {
+            "name": "output",
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label"
+              ],
+              "type": "object"
+            },
+            "strict": true
+          },
+          "type": "json_schema"
+        },
+        "temperature": 0.0
+      },
+      "expected_spec": {
+        "assumptions": [],
+        "bindings": [
+          {
+            "call": "call1",
+            "message": 1,
+            "placeholder": "{x}",
+            "source": "input#/x"
+          }
+        ],
+        "calls": [
+          {
+            "id": "call1",
+            "max_tokens": 2048,
+            "messages": [
+              {
+                "content": "Fixed instructions",
+                "role": "system"
+              },
+              {
+                "content": "JSON {\"fixed\":1} Value {x}",
+                "role": "user"
+              }
+            ],
+            "model": "example/model",
+            "response_format": {
+              "json_schema": {
+                "name": "output",
+                "schema": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "label"
+                  ],
+                  "type": "object"
+                },
+                "strict": true
+              },
+              "type": "json_schema"
+            },
+            "temperature": 0.0
+          }
+        ],
+        "evaluator": "exact",
+        "input_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "x": {
+              "additionalProperties": {
+                "type": "boolean"
+              },
+              "title": "X",
+              "type": "object"
+            }
+          },
+          "required": [
+            "x"
+          ],
+          "title": "Inputs",
+          "type": "object"
+        },
+        "inputs": {
+          "x": {
+            "flag": true
+          }
+        },
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "label": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label"
+          ],
+          "type": "object"
+        },
+        "preparation": {
+          "description": null,
+          "kind": "sdk",
+          "source_id": "941ac697057b98df5256203c06ad70586b8a2cfc390e68c1b3a72a9c190c306c",
+          "source_version": "seldon-sdk-contract-v1",
+          "status": "resolved",
+          "version": "preparation-v1"
+        },
+        "version": "function-spec-v1",
+        "wire_mode": "input_object"
+      },
+      "expected_spec_digest": "5c49a4922db7d6341bf79725b320dacccb4f33d139bf2919788783acec8f7f6b",
+      "name": "case_29",
+      "source": {
+        "contract": {
+          "input_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "x": {
+                "additionalProperties": {
+                  "type": "boolean"
+                },
+                "title": "X",
+                "type": "object"
+              }
+            },
+            "required": [
+              "x"
+            ],
+            "title": "Inputs",
+            "type": "object"
+          },
+          "max_tokens": 2048,
+          "messages": [
+            {
+              "content": "Fixed instructions",
+              "role": "system"
+            },
+            {
+              "content": "JSON {\"fixed\":1} Value {x}",
+              "role": "user"
+            }
+          ],
+          "model": "example/model",
+          "output_schema": {
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "label"
+            ],
+            "type": "object"
+          },
+          "response_format": {
+            "json_schema": {
+              "name": "output",
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "label"
+                ],
+                "type": "object"
+              },
+              "strict": true
+            },
+            "type": "json_schema"
+          },
+          "temperature": 0,
+          "version": "seldon-sdk-contract-v1"
+        },
+        "digest": "941ac697057b98df5256203c06ad70586b8a2cfc390e68c1b3a72a9c190c306c",
+        "example_inputs": {
+          "x": {
+            "flag": true
+          }
+        },
+        "key": "synthetic:case_29",
+        "kind": "sdk"
+      }
+    }
+  ],
+  "provenance": "synthetic SDK-owned inputs; server import_sdk and executor.render_request",
+  "version": "seldon-sdk-conformance-v1"
+}

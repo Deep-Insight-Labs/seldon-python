@@ -1,0 +1,106 @@
+[
+  {
+    "index": 0,
+    "contract_digest": "0072b75d917ed9f388852764f97fe7eaf73e35d4307d40dca19b107e8b3a3e46",
+    "strict_reasons": []
+  },
+  {
+    "index": 1,
+    "contract_digest": "e3a33a95aba0b65c8bdfa862037d78b0040e6317af0ddf4a380b455b678475f4",
+    "strict_reasons": []
+  },
+  {
+    "index": 2,
+    "contract_digest": "9f9646002f85ea516e8eea63d4552221bd040cf2f8ed93d7ef24e54ba3a1fe99",
+    "strict_reasons": []
+  },
+  {
+    "index": 3,
+    "contract_digest": "55ed442a0f2e322b15779b970a32ac299cf54d45db12c47be900717cd60315b7",
+    "strict_reasons": []
+  },
+  {
+    "index": 4,
+    "contract_digest": "376964eeb919f5c3b2343fbb9f565187746b5e731ada57d8de125a207b719ed2",
+    "strict_reasons": []
+  },
+  {
+    "index": 5,
+    "contract_digest": "1a2b21b39a24649f1e47bc2186f64b2bc6e6c75044d3e13510a5135ae7266b4a",
+    "strict_reasons": []
+  },
+  {
+    "index": 6,
+    "contract_digest": "c26d8b59b923fcb25694d170a9a37bc30d61edbd1e5db8cc6ce6fe8a2e6ca904",
+    "strict_reasons": []
+  },
+  {
+    "index": 7,
+    "contract_digest": "8696a272dae3e367f3818c4d76132afb26398caa5a77323cbd1f3302e38bd8c7",
+    "strict_reasons": []
+  },
+  {
+    "index": 8,
+    "contract_digest": "7b4828c41eb052500b982428a154f0d7bab26a5303c2d0fea8b9ef6420758df7",
+    "strict_reasons": []
+  },
+  {
+    "index": 9,
+    "contract_digest": "27cbeb8c10b84a07cb0dc49dc526cde525faed56d22c66ec093d3816b6d39132",
+    "strict_reasons": []
+  },
+  {
+    "index": 10,
+    "contract_digest": "49b488d1217a91286e4931ca66d5c3c9218acaa4b4cab9806d1bc6409b372e41",
+    "strict_reasons": []
+  },
+  {
+    "index": 11,
+    "contract_digest": "bae1acd6fee505403c01d493a1a70cf73043d09d98021134de57f745078ae276",
+    "strict_reasons": []
+  },
+  {
+    "index": 12,
+    "contract_digest": "ea0264a40b219ed0a381ffa75ecf4ea5a104df2d0581e5646aad9b34f61ea4cd",
+    "strict_reasons": []
+  },
+  {
+    "index": 13,
+    "contract_digest": "c8cc1dccdf6cc29cebea2bfaf80768afe270d5ec02dea21874f44cc3d916b23e",
+    "strict_reasons": []
+  },
+  {
+    "index": 14,
+    "contract_digest": "254b33b45e38e10b31b61bf0494d0f25c30dac75b86aa80321c8fcbd4ceb7b06",
+    "strict_reasons": []
+  },
+  {
+    "index": 15,
+    "contract_digest": "8ec7d653c85613fd74219f265b596a009047c6481a56e9d0039f734b34a73642",
+    "strict_reasons": [
+      "open_object"
+    ]
+  },
+  {
+    "index": 16,
+    "contract_digest": "11be211fdc2247c514b2f5e8d478530fe7cde4cf63bccfc7119d897875209684",
+    "strict_reasons": [
+      "open_object"
+    ]
+  },
+  {
+    "index": 17,
+    "contract_digest": "abedfe20ce5060af0e42de62ae4eaa3cb519786d874cc06fadc2c748e57ac6aa",
+    "strict_reasons": []
+  },
+  {
+    "index": 18,
+    "contract_digest": "5f04ccc3573e3caa2f60dda8ee9ad0e3f0a883fa1d8514325b1181d831c0393f",
+    "strict_reasons": []
+  },
+  {
+    "index": 19,
+    "contract_digest": "85d01e310a7478d48e45ae3c1e0e57a9dd53e63d4bc7272767d1114049965b44",
+    "strict_reasons": []
+  }
+]

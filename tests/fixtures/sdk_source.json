@@ -1,0 +1,73 @@
+{
+  "kind": "sdk",
+  "key": "example:classify",
+  "contract": {
+    "version": "seldon-sdk-contract-v1",
+    "model": "example/model",
+    "temperature": 0,
+    "max_tokens": 2048,
+    "messages": [
+      {
+        "role": "user",
+        "content": "Classify {document}"
+      }
+    ],
+    "input_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "document": {
+          "title": "Document",
+          "type": "string"
+        }
+      },
+      "required": [
+        "document"
+      ],
+      "title": "Inputs",
+      "type": "object"
+    },
+    "output_schema": {
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "label",
+        "confidence"
+      ],
+      "type": "object",
+      "additionalProperties": false
+    },
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "output",
+        "strict": true,
+        "schema": {
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "confidence": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "label",
+            "confidence"
+          ],
+          "type": "object",
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "digest": "224af0dcddd52ebb6741cc3f0006927dac3a24246e86970fc5e84fe26432bbca",
+  "example_inputs": {
+    "document": "A synthetic sample"
+  }
+}
