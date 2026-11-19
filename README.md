@@ -203,3 +203,33 @@ interactive confirmation. It is never inferred from general access or optimizati
 With no lockfile it lists remote Functions. `activate <function> --alternative N`
 selects the 1-based item from the associated run's authoritative report; it prints
 the returned immutable revision before the same owner confirmation as `--revision`.
+
+### Release setup
+
+The approved public repository is `Deep-Insight-Labs/seldon-python`. Releases use
+`.github/workflows/release.yml` and the existing Python/Pydantic CI matrix. A
+`v<version>` tag must exactly match `pyproject.toml`; a branch dispatch builds and
+checks artifacts only. Current `0.1.0.dev0` is an unpublished prerelease.
+
+Before enabling publication, the package owner must register pending trusted
+publishers for project `seldon-sdk` on **both** registries:
+
+| Registry | GitHub owner | Repository | Workflow | Environment |
+| --- | --- | --- | --- | --- |
+| TestPyPI | Deep-Insight-Labs | seldon-python | release.yml | testpypi |
+| PyPI | Deep-Insight-Labs | seldon-python | release.yml | pypi |
+
+Create matching GitHub environments and set
+`SELDON_SDK_TESTPYPI_PUBLISH_ENABLED=true` only after TestPyPI registration.
+The first tag publishes there, downloads that exact wheel from TestPyPI, and runs
+fresh-environment artifact checks with dependencies from PyPI. Production upload
+also requires `SELDON_SDK_PUBLISH_ENABLED=true` and a successful TestPyPI install
+in the same workflow. It uploads the original checked distributions. Registry
+versions are immutable; do not replace an uploaded release or silently skip an
+existing artifact. Keep both variables unset until the release is authorized and
+the issued-token, refresh-rotation and remote-logout qualification described above
+is recorded. These external checks have not been established by local unit tests.
+
+No registry token belongs in this repository: publication uses GitHub OIDC.
+`pip install 'seldon-sdk[local]'` additionally requires a separately published
+`seldon-runtime>=0.1.1.dev0`; the base SDK has no runtime dependency.

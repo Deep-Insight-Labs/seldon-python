@@ -1,0 +1,99 @@
+name: SDK release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sdk-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    uses: ./.github/workflows/ci.yml
+
+  build:
+    needs: checks
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.value }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Verify immutable release identity
+        id: version
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          python - <<'PY'
+          import os, tomllib
+          with open('pyproject.toml', 'rb') as source:
+              version = tomllib.load(source)['project']['version']
+          if os.environ['REF_TYPE'] == 'tag':
+              assert os.environ['REF_NAME'] == 'v' + version, 'tag/version mismatch'
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('value=' + version + '\n')
+          PY
+      - run: python -m pip install build twine
+      - run: python -m build && python -m twine check dist/*
+      - run: python scripts/verify_wheel.py dist/*.whl
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdk-distributions
+          path: dist/
+          if-no-files-found: error
+
+  testpypi:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v') && vars.SELDON_SDK_TESTPYPI_PUBLISH_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: testpypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: sdk-distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  installed-testpypi:
+    needs: [build, testpypi]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Download only the exact SDK from TestPyPI
+        env:
+          SDK_VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          python -m pip download --no-deps --only-binary=:all: \
+            --index-url https://test.pypi.org/simple/ \
+            --dest downloaded "seldon-sdk==$SDK_VERSION"
+      - name: Verify downloaded wheel in a fresh environment
+        run: python scripts/verify_wheel.py downloaded/*.whl
+
+  pypi:
+    needs: [build, installed-testpypi]
+    if: startsWith(github.ref, 'refs/tags/v') && vars.SELDON_SDK_PUBLISH_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: sdk-distributions
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1

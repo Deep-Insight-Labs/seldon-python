@@ -128,3 +128,27 @@ selection from the associated server report. Both retain explicit-ID support,
 interactive owner confirmation and server role checks. Two regressions bring the
 suite to43 passing, including zero requests for noninteractive alternative
 activation. These are implemented command paths, not deferred conveniences.
+
+## 2026-11-20 — release preparation, no publication
+
+Prepared `release.yml`: exact `v<version>` tag validation, the existing full
+Python/Pydantic CI matrix as a reusable dependency, build/twine/fresh-wheel checks,
+TestPyPI OIDC upload, exact TestPyPI wheel download and fresh installation, then
+separately guarded PyPI OIDC upload. Branch dispatches build only. Versions remain
+unchanged. README records exact pending-publisher fields and environment/variable
+setup; issued-session authentication qualification remains separate.
+
+Local evidence: 43 tests pass; actionlint accepts both workflows; sdist/wheel pass
+twine and `scripts/verify_wheel.py` in a fresh environment. Forty tracked files and
+Git history were reviewed for common private-key/GitHub/PyPI/AWS credential patterns
+and credential filenames: no matches. Source/fixtures are SDK-authored synthetic
+content; internal application prompts/schemas/code are absent. This bounded check
+is not a claim that automated secret detection proves arbitrary text safe.
+
+Both `seldon-sdk` and `seldon-runtime` returned HTTP404 from PyPI and TestPyPI JSON
+APIs at inspection. This does not guarantee registry name claimability. The local
+SDK has no remote; no external repository, environment, publisher or package was
+created. The GitHub account can administer the existing Seldon repository and the
+organization permits public repository creation. No local PyPI credential file or
+publishing environment variables were found. Package-owner registry setup is still
+needed before publication; the checked artifacts alone do not establish release.
