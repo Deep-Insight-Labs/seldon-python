@@ -1,12 +1,15 @@
 # Seldon Python
 
-Local development preview of `seldon-sdk`: one CLI for preparing an existing AI
+Source preview of `seldon-sdk`: one CLI for preparing an existing AI
 operation, comparing explicit alternatives and adopting a revision. A typed Python
 Function decorator is optional. This is a separate project from SeldonIO.
 
 ## Install
 
 ```sh
+# Install the reviewed source preview without requiring a PyPI release:
+python -m pip install 'seldon-sdk[login] @ git+https://github.com/Deep-Insight-Labs/seldon-python.git@74a0aa3680c9174d433be197cb6283e1832436f6'
+# Or install from your checkout:
 python -m pip install '.[login]'
 # or, from a built wheel:
 python -m pip install dist/seldon_sdk-0.1.0.dev0-py3-none-any.whl
@@ -19,9 +22,11 @@ latest Pydantic; earlier 2.x versions change generated contract digests.
 Secret Service backends are accepted. A login without an available secure backend
 is memory-only; its result explicitly reports `persisted: false`.
 
-This repository is a local implementation preview, not evidence of public package
+This repository is a source preview, not evidence of public package
 publication, production feature activation, live WorkOS login or local model
 qualification. Server SDK capabilities are independently feature flagged.
+Local-runtime publication is deferred pending license review; do not install the
+`local` extra until a runtime distribution is available.
 
 ## Existing client workflow
 
