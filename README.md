@@ -197,3 +197,9 @@ A known deadline risk additionally requires `--acknowledge-deadline-risk`.
 When the server requires consent to use managed funding for a selected revision,
 `publish` / `activate --approve-managed-fallback` carries that consent in the
 interactive confirmation. It is never inferred from general access or optimization.
+
+`status` without a locator reads every key in the nearest `seldon.lock.json` (or
+`SELDON_LOCKFILE`) and shows active/pending/stale digest state plus seven-day usage.
+With no lockfile it lists remote Functions. `activate <function> --alternative N`
+selects the 1-based item from the associated run's authoritative report; it prints
+the returned immutable revision before the same owner confirmation as `--revision`.

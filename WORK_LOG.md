@@ -121,3 +121,10 @@ issued WorkOS login/logout, complete invalid corpus/provenance, internal strict
 typing and exhaustive performance/retry/concurrency/scanner matrices. Human-timed
 baseline and provider quality/savings remain unmeasured. Actual owning-application
 local Runner success/fallback/raise is not covered by the hosted Vector rehearsal.
+
+The final plan audit also implemented lockfile-wide `status` (per-key active,
+pending or stale digest plus read-only usage) and 1-based `activate --alternative`
+selection from the associated server report. Both retain explicit-ID support,
+interactive owner confirmation and server role checks. Two regressions bring the
+suite to43 passing, including zero requests for noninteractive alternative
+activation. These are implemented command paths, not deferred conveniences.

@@ -161,6 +161,32 @@ class Management:
 
     def status(self, function=None):
         if function is None:
+            from .lockfile import locate, read
+
+            path = locate(None)
+            if path.exists():
+                rows = []
+                for key, entry in sorted(read(path)["functions"].items()):
+                    row = self.status(entry["function_id"])
+                    detail = self.detail(entry["function_id"])
+                    active = next(
+                        (
+                            item
+                            for item in detail.get("revisions", [])
+                            if str(item["id"]) == str(detail.get("active_revision"))
+                        ),
+                        None,
+                    )
+                    row["key"] = key
+                    row["local_state"] = (
+                        "pending"
+                        if active is None
+                        else "active"
+                        if active.get("source_digest") == entry["contract_digest"]
+                        else "stale_lock"
+                    )
+                    rows.append(row)
+                return {"items": rows}
             return {
                 "items": [
                     self._summary(item) for item in self.request("GET", FUNCTIONS).get("items", [])
@@ -352,6 +378,7 @@ class Management:
         revision,
         *,
         publish=False,
+        alternative=None,
         confirm,
         interactive,
         managed_fallback_approved=False,
@@ -359,8 +386,18 @@ class Management:
         if not interactive:
             raise SeldonAuthError("interactive_owner_confirmation_required")
         self.login.access_token()
-        function, revision = resolve_function(function), str(UUID(revision))
-        detail = self.detail(function)
+        function = resolve_function(function)
+        state = self.association.read()
+        selected_run = state.get("run_id") if state.get("function_id") == function else None
+        detail = self.detail(function, run_id=selected_run)
+        if alternative is not None:
+            choices = detail.get("alternatives", [])
+            if revision is not None or not 1 <= alternative <= len(choices):
+                raise SeldonContractError("alternative_unavailable")
+            revision = choices[alternative - 1].get("revision_id")
+            if revision is None:
+                raise SeldonContractError("alternative_not_deployable")
+        revision = str(UUID(revision))
         selected = next(
             (item for item in detail.get("revisions", []) if str(item["id"]) == revision), None
         )

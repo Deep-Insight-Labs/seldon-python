@@ -240,3 +240,74 @@ def test_source_import_returns_authoritative_contract_and_reuses_identity(tmp_pa
     assert unchanged["status"] == "unchanged"
     assert unchanged["contract_digest"] == "a" * 64
     assert [request.method for request in calls] == ["POST", "GET"]
+
+
+def test_status_reads_every_lock_key_and_active_digest(tmp_path, monkeypatch, capsys):
+    identity, revision = str(uuid4()), str(uuid4())
+    lock = tmp_path / "seldon.lock.json"
+    lock.write_text(
+        json.dumps(
+            {
+                "version": "seldon-lock-v1",
+                "functions": {
+                    "match": {"function_id": identity, "contract_digest": "a" * 64},
+                    "stale": {"function_id": identity, "contract_digest": "b" * 64},
+                },
+            }
+        )
+    )
+    monkeypatch.setenv("SELDON_LOCKFILE", str(lock))
+
+    def handler(request):
+        assert request.method == "GET"
+        if request.url.path.endswith("/usage"):
+            return httpx.Response(200, json={"days": [{"requests": 3}]})
+        return httpx.Response(
+            200,
+            json={
+                "id": identity,
+                "revision": 3,
+                "active_revision": revision,
+                "serving_state": "alternative",
+                "revisions": [{"id": revision, "source_digest": "a" * 64}],
+            },
+        )
+
+    assert main(["status"], login=Session(handler)) == 0
+    rows = json.loads(capsys.readouterr().out)["items"]
+    assert [row["local_state"] for row in rows] == ["active", "stale_lock"]
+    assert all(row["usage"]["days"][0]["requests"] == 3 for row in rows)
+
+
+def test_alternative_selection_uses_returned_revision_and_owner_confirmation(tmp_path):
+    identity, revision = str(uuid4()), str(uuid4())
+    requests, confirmations = [], []
+
+    def handler(request):
+        requests.append(request)
+        if request.method == "POST":
+            assert json.loads(request.content)["revision_id"] == revision
+        return httpx.Response(
+            200,
+            json={
+                "id": identity,
+                "revision": 3,
+                "alternatives": [{"revision_id": revision}],
+                "revisions": [{"id": revision, "metrics": {"pass_rate": 1}}],
+            },
+        )
+
+    args = ["activate", identity, "--alternative", "1"]
+    assert main(args, login=Session(handler), interactive=False) == 2
+    assert not requests
+    assert (
+        main(
+            args,
+            login=Session(handler),
+            interactive=True,
+            confirm=lambda preview: confirmations.append(preview) or True,
+        )
+        == 0
+    )
+    assert confirmations[0]["revision_id"] == revision
+    assert [request.method for request in requests] == ["GET", "POST"]

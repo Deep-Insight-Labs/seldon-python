@@ -62,7 +62,12 @@ def parser():
     for name in ("activate", "publish"):
         action = commands.add_parser(name)
         action.add_argument("function")
-        action.add_argument("--revision", required=True)
+        choice = action.add_mutually_exclusive_group(required=True)
+        choice.add_argument("--revision")
+        if name == "activate":
+            choice.add_argument(
+                "--alternative", type=int, help="1-based index from the selected report"
+            )
         action.add_argument("--approve-managed-fallback", action="store_true")
     examples = commands.add_parser("examples").add_subparsers(dest="example_command", required=True)
     attach = examples.add_parser("import")
@@ -311,6 +316,7 @@ def main(argv=None, *, login=None, interactive=None, confirm=None):
             result, code = api.activate(
                 args.function,
                 args.revision,
+                alternative=getattr(args, "alternative", None),
                 publish=args.command == "publish",
                 managed_fallback_approved=args.approve_managed_fallback,
                 interactive=sys.stdin.isatty() if interactive is None else interactive,
