@@ -22,11 +22,9 @@ latest Pydantic; earlier 2.x versions change generated contract digests.
 Secret Service backends are accepted. A login without an available secure backend
 is memory-only; its result explicitly reports `persisted: false`.
 
-This repository is a source preview, not evidence of public package
-publication, production feature activation, live WorkOS login or local model
-qualification. Server SDK capabilities are independently feature flagged.
-Local-runtime publication is deferred pending license review; do not install the
-`local` extra until a runtime distribution is available.
+The SDK is currently distributed as a source preview. A live WorkOS session
+check remains before its PyPI release. Server SDK capabilities are independently
+feature flagged. The optional runtime preview is published separately.
 
 ## Existing client workflow
 
@@ -147,9 +145,11 @@ assert calls == [{"text": "input"}]
 
 ## Local execution
 
-Install the separately built `seldon-runtime` and its appropriate model extras.
-Its own CPU installation instructions and supported version constraints remain
-authoritative. Hosted comparison does not prove local latency or business quality.
+Local execution requires an eligible deployment and the separately released
+`seldon-runtime` package. Follow the CPU and model-extra instructions in the
+[public runtime repository](https://github.com/Deep-Insight-Labs/seldon-runtime).
+The [0.1.1.dev0 runtime preview](https://pypi.org/project/seldon-runtime/0.1.1.dev0/)
+is available for Python 3.11 and later.
 
 ```sh
 seldon function pull FUNCTION_UUID --out bundle.json
