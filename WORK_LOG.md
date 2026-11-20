@@ -168,3 +168,13 @@ separate platform qualification scope.
 The Apache-2.0 runtime preview 0.1.1.dev0 is published separately. The source SDK
 remains 0.1.0.dev0 for its first package release, using the reviewed TestPyPI-first
 workflow and checked immutable artifacts.
+
+Release run 44717963207 passed all four Python/Pydantic jobs, built checked
+artifacts, published to TestPyPI, verified a fresh installed candidate and
+published the original files to PyPI. PyPI SHA-256 matched the downloaded build:
+
+- Wheel `4d9fb0b16657ec983fa36db54240394721dba33a04dae394ab8b71dda4bda268`
+- Source `acd0b52a32e7e0a848eee90dc536269d9c6e897d640574899d641c6752907e21`
+
+Source revision `958ab5b`, tag `v0.1.0.dev0`. Package publication and backend
+feature activation have separate evidence.

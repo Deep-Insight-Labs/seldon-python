@@ -7,12 +7,7 @@ Function decorator is optional. This is a separate project from SeldonIO.
 ## Install
 
 ```sh
-# Install the reviewed source preview without requiring a PyPI release:
-python -m pip install 'seldon-sdk[login] @ git+https://github.com/Deep-Insight-Labs/seldon-python.git@74a0aa3680c9174d433be197cb6283e1832436f6'
-# Or install from your checkout:
-python -m pip install '.[login]'
-# or, from a built wheel:
-python -m pip install dist/seldon_sdk-0.1.0.dev0-py3-none-any.whl
+python -m pip install 'seldon-sdk[login]==0.1.0.dev0'
 ```
 
 Python 3.10+ is supported. Core dependencies are httpx and Pydantic 2.11+.
@@ -22,8 +17,9 @@ latest Pydantic; earlier 2.x versions change generated contract digests.
 Secret Service backends are accepted. A login without an available secure backend
 is memory-only; its result explicitly reports `persisted: false`.
 
-The SDK is currently a source preview. Live WorkOS device login, macOS Keychain
-storage, token rotation and session logout were exercised before package release.
+The first SDK preview, `0.1.0.dev0`, is published on PyPI. Live WorkOS device
+login, macOS Keychain storage, token rotation and session logout were exercised
+before package release.
 Server SDK capabilities are independently feature flagged. The optional runtime
 preview is published separately.
 
@@ -215,7 +211,7 @@ the returned immutable revision before the same owner confirmation as `--revisio
 The approved public repository is `Deep-Insight-Labs/seldon-python`. Releases use
 `.github/workflows/release.yml` and the existing Python/Pydantic CI matrix. A
 `v<version>` tag must exactly match `pyproject.toml`; a branch dispatch builds and
-checks artifacts only. Current `0.1.0.dev0` is an unpublished prerelease.
+checks artifacts only. Preview `0.1.0.dev0` is published on PyPI.
 
 Before enabling publication, the package owner must register pending trusted
 publishers for project `seldon-sdk` on **both** registries:
