@@ -22,9 +22,10 @@ latest Pydantic; earlier 2.x versions change generated contract digests.
 Secret Service backends are accepted. A login without an available secure backend
 is memory-only; its result explicitly reports `persisted: false`.
 
-The SDK is currently distributed as a source preview. A live WorkOS session
-check remains before its PyPI release. Server SDK capabilities are independently
-feature flagged. The optional runtime preview is published separately.
+The SDK is currently a source preview. Live WorkOS device login, macOS Keychain
+storage, token rotation and session logout were exercised before package release.
+Server SDK capabilities are independently feature flagged. The optional runtime
+preview is published separately.
 
 ## Existing client workflow
 

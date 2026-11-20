@@ -152,3 +152,19 @@ created. The GitHub account can administer the existing Seldon repository and th
 organization permits public repository creation. No local PyPI credential file or
 publishing environment variables were found. Package-owner registry setup is still
 needed before publication; the checked artifacts alone do not establish release.
+
+## 2026-11-20 — Live WorkOS device-session qualification
+
+The installed SDK completed the public WorkOS device authorization flow with a
+Seldon workspace account. The real management API accepted its issued access
+token. The SDK persisted the refresh token using macOS Keychain. A fresh Login
+object loaded the saved profile and token, then stored a different rotated refresh
+token. SDK logout deleted the keychain entry and requested the documented WorkOS
+session logout URL. WorkOS returned HTTP 302 and a later refresh with the rotated
+token was rejected with HTTP 400. The temporary profile was removed. No credential
+or user claims were logged. Linux and Windows keychain integrations retain their
+separate platform qualification scope.
+
+The Apache-2.0 runtime preview 0.1.1.dev0 is published separately. The source SDK
+remains 0.1.0.dev0 for its first package release, using the reviewed TestPyPI-first
+workflow and checked immutable artifacts.
