@@ -7,7 +7,7 @@ Function decorator is optional. This is a separate project from SeldonIO.
 ## Install
 
 ```sh
-python -m pip install 'seldon-sdk[login]==0.1.0.dev0'
+python -m pip install 'seldon-sdk[login]==0.1.0.dev1'
 ```
 
 Python 3.10+ is supported. Core dependencies are httpx and Pydantic 2.11+.
@@ -17,7 +17,9 @@ latest Pydantic; earlier 2.x versions change generated contract digests.
 Secret Service backends are accepted. A login without an available secure backend
 is memory-only; its result explicitly reports `persisted: false`.
 
-The first SDK preview, `0.1.0.dev0`, is published on PyPI. Live WorkOS device
+The next SDK preview, `0.1.0.dev1`, is prepared for release; publication is pending.
+The install command above targets that release and becomes available after
+publication. The earlier `0.1.0.dev0` preview is published on PyPI. Live WorkOS device
 login, macOS Keychain storage, token rotation and session logout were exercised
 before package release.
 Server SDK capabilities are independently feature flagged. The optional runtime
@@ -85,7 +87,8 @@ A single exported `kind: sdk` source can also include the server's optional
 Evaluation is outside the declared behavior digest. Re-syncing an unchanged
 declaration preserves separately imported evaluation evidence. These changes
 require the matching server update before using a new SDK build; deploy the
-server first. The published `0.1.0.dev0` package remains the earlier preview.
+server first, before publishing or using `0.1.0.dev1`. The published
+`0.1.0.dev0` package remains the earlier preview.
 
 ## Typed Python functions
 
@@ -232,7 +235,8 @@ the returned immutable revision before the same owner confirmation as `--revisio
 The approved public repository is `Deep-Insight-Labs/seldon-python`. Releases use
 `.github/workflows/release.yml` and the existing Python/Pydantic CI matrix. A
 `v<version>` tag must exactly match `pyproject.toml`; a branch dispatch builds and
-checks artifacts only. Preview `0.1.0.dev0` is published on PyPI.
+checks artifacts only. Preview `0.1.0.dev0` is published on PyPI; `0.1.0.dev1`
+is the prepared next release and has not been published.
 
 Before enabling publication, the package owner must register pending trusted
 publishers for project `seldon-sdk` on **both** registries:

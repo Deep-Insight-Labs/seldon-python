@@ -214,3 +214,19 @@ integration formats with representative synthetic examples, compiler jobs,
 publish, activation, invocation and cleanup; these prove integration, not quality.
 No package was published, no production state changed, and no live secure-store
 qualification was rerun. Other-platform authentication remains separately unverified.
+
+## 2026-11-25 — Prepare dev1 after running-stack QA
+
+Prepared `0.1.0.dev1` with matching package/runtime version and the existing
+TestPyPI-first release workflow. Publication waits for the matching backend
+production deployment. Full SDK tests (114), strict typing, Ruff/format, build,
+twine and fresh base-only wheel verification pass.
+
+The dev1 wheel was installed into a fresh local QA client and exercised against
+an independently running router, PostgreSQL, Redis and Celery consumers. Both
+explicit-template and typed flows imported four representative synthetic cases,
+replayed an unchanged evidence update, compared through real worker processes,
+published a revision without moving the alias, activated and invoked it, then
+deleted the Function and revoked the test key. Each fixture compilation settled
+0.026860 with no holds. The typed callable returned contract-check match against
+the selected revision. No external provider or production call occurred.

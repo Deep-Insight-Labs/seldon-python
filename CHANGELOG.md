@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — Complete SDK evidence and runtime contracts
+## 0.1.0.dev1 — Complete SDK evidence and runtime contracts (prepared)
 
 - Fix pre-run evidence import failing for SDK-owned Functions: use the server
   evaluation-only update, preserving declaration identity and the active alias.
@@ -10,7 +10,10 @@
   once, including input/configuration failures, local execution and stubs.
 - Complete strict source typing and CI checks, lockfile schema/timestamps, public
   conformance provenance and invalid vectors. Add retry/concurrency/privacy and
-  installed-artifact regression coverage. These sources are not a new PyPI release.
+  installed-artifact regression coverage. Publication remains pending.
+- Server-first dependency: deploy the matching Seldon server with SDK evaluation
+  registration and `PATCH /v1/seldon/functions/{id}/draft-evaluation` before
+  publishing or using this preview. The earlier `0.1.0.dev0` remains published.
 
 ## 0.1.0.dev0 — local preview
 

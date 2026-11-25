@@ -1,6 +1,6 @@
 """Explicit Seldon Functions. Imports create no clients and load no application files."""
 
-__version__ = "0.1.0.dev0"
+__version__ = "0.1.0.dev1"
 
 
 def function(**settings):
