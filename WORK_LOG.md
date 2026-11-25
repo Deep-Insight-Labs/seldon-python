@@ -230,3 +230,25 @@ published a revision without moving the alias, activated and invoked it, then
 deleted the Function and revoked the test key. Each fixture compilation settled
 0.026860 with no holds. The typed callable returned contract-check match against
 the selected revision. No external provider or production call occurred.
+
+## 2026-11-25 — Published dev1 after server acceptance
+
+The matching hosted server passed production deployment and smoke acceptance
+before tag `v0.1.0.dev1` at `5d70371a6414110c03a25db7d8f33f81feaa7515` was pushed.
+[Release CI 45559766815](https://github.com/Deep-Insight-Labs/seldon-python/actions/runs/45559766815)
+passed all four Python/Pydantic matrix cells, built/checked artifacts, published to
+TestPyPI, verified the exact downloaded wheel in a fresh environment, then
+published the original distributions to PyPI.
+
+Public PyPI files were downloaded independently and matched the CI distributions
+byte for byte and their registry SHA-256 values:
+
+- Wheel: `790e86f2c75dfbe8c98a3b0a005af5d0e5a052fabda71a49a4f3f5fcb0a9c991`.
+- Source archive: `5e3e1f101e6135555cb104bff797b8f75335c790c96020a7a684b44e1cd10044`.
+
+The downloaded wheel passed `scripts/verify_wheel.py` from a fresh environment:
+console version, offline import, lazy imports, packaged skill/license/type marker
+and typed stub execution. Its wheel digest also matches the wheel used for the
+local running-stack rehearsal above. Publication establishes artifact availability;
+no additional provider-quality, private-application or cross-platform secure-store
+qualification is claimed.

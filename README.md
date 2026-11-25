@@ -1,6 +1,6 @@
 # Seldon Python
 
-Source preview of `seldon-sdk`: one CLI for preparing an existing AI
+Development preview of `seldon-sdk`: one CLI for preparing an existing AI
 operation, comparing explicit alternatives and adopting a revision. A typed Python
 Function decorator is optional. This is a separate project from SeldonIO.
 
@@ -17,9 +17,9 @@ latest Pydantic; earlier 2.x versions change generated contract digests.
 Secret Service backends are accepted. A login without an available secure backend
 is memory-only; its result explicitly reports `persisted: false`.
 
-The next SDK preview, `0.1.0.dev1`, is prepared for release; publication is pending.
-The install command above targets that release and becomes available after
-publication. The earlier `0.1.0.dev0` preview is published on PyPI. Live WorkOS device
+SDK preview [`0.1.0.dev1`](https://pypi.org/project/seldon-sdk/0.1.0.dev1/) is
+published on PyPI after the matching hosted-server deployment. The earlier
+`0.1.0.dev0` preview remains available. Live WorkOS device
 login, macOS Keychain storage, token rotation and session logout were exercised
 before package release.
 Server SDK capabilities are independently feature flagged. The optional runtime
@@ -86,9 +86,9 @@ A single exported `kind: sdk` source can also include the server's optional
 `evaluation` definition (instructions, supported checks/metric and examples).
 Evaluation is outside the declared behavior digest. Re-syncing an unchanged
 declaration preserves separately imported evaluation evidence. These changes
-require the matching server update before using a new SDK build; deploy the
-server first, before publishing or using `0.1.0.dev1`. The published
-`0.1.0.dev0` package remains the earlier preview.
+require the matching server update. The hosted Seldon service deployed that update
+before `0.1.0.dev1` publication; self-hosted servers must also include SDK evaluation
+registration and the draft-evaluation endpoint.
 
 ## Typed Python functions
 
@@ -235,11 +235,12 @@ the returned immutable revision before the same owner confirmation as `--revisio
 The approved public repository is `Deep-Insight-Labs/seldon-python`. Releases use
 `.github/workflows/release.yml` and the existing Python/Pydantic CI matrix. A
 `v<version>` tag must exactly match `pyproject.toml`; a branch dispatch builds and
-checks artifacts only. Preview `0.1.0.dev0` is published on PyPI; `0.1.0.dev1`
-is the prepared next release and has not been published.
+checks artifacts only. Preview `0.1.0.dev1` is published on PyPI;
+[release CI](https://github.com/Deep-Insight-Labs/seldon-python/actions/runs/45559766815)
+passed TestPyPI installation before uploading the original distributions to PyPI.
 
-Before enabling publication, the package owner must register pending trusted
-publishers for project `seldon-sdk` on **both** registries:
+Both registries are configured for trusted publishing. For a new publisher
+configuration, register project `seldon-sdk` on **both** registries:
 
 | Registry | GitHub owner      | Repository    | Workflow    | Environment |
 | -------- | ----------------- | ------------- | ----------- | ----------- |
