@@ -11,7 +11,9 @@ import time
 import warnings
 import weakref
 from collections import deque
+from collections.abc import Callable
 from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any, NoReturn, cast
 from urllib.parse import urlsplit
 from uuid import uuid4
 
@@ -32,14 +34,19 @@ from .errors import (
 from .files import canonical, safe_code
 from .lockfile import locate, read
 
-_settings = {}
-_async_clients = weakref.WeakKeyDictionary()
+if TYPE_CHECKING:
+    from .decorator import Function
+
+_settings: dict[str, Any] = {}
+_async_clients: weakref.WeakKeyDictionary[asyncio.AbstractEventLoop, httpx.AsyncClient] = (
+    weakref.WeakKeyDictionary()
+)
 _sync = threading.local()
 _guard = threading.Lock()
-_warned = set()
+_warned: set[tuple[str, str]] = set()
 
 
-def configure(**settings):
+def configure(**settings: Any) -> None:
     allowed = {
         "base_url",
         "api_key",
@@ -60,7 +67,7 @@ def configure(**settings):
     _settings.update(settings)
 
 
-def _url(value):
+def _url(value: str) -> str:
     parsed = urlsplit(value)
     if (
         (
@@ -78,7 +85,7 @@ def _url(value):
     return value if value.endswith("/v1") else value + "/v1"
 
 
-def warn_once(key, code):
+def warn_once(key: str, code: str) -> None:
     with _guard:
         if (key, code) in _warned:
             return
@@ -97,19 +104,19 @@ class CallInfo:
     contract_check: str = "unsupported"
     attempts: int = 0
     latency_ms: float = 0
-    usage: dict | None = None
+    usage: dict[str, Any] | None = None
     reference_output_fenced: bool = False
 
 
 class Breaker:
-    def __init__(self, clock=time.monotonic):
+    def __init__(self, clock: Callable[[], float] = time.monotonic) -> None:
         self.clock = clock
-        self.events = deque(maxlen=20)
-        self.until = 0
+        self.events: deque[tuple[float, bool]] = deque(maxlen=20)
+        self.until = 0.0
         self.probing = False
         self.lock = threading.Lock()
 
-    def allow(self):
+    def allow(self) -> str | bool:
         with self.lock:
             if not self.until:
                 return "normal"
@@ -118,7 +125,7 @@ class Breaker:
             self.probing = True
             return "probe"
 
-    def record(self, failed, *, probe=False):
+    def record(self, failed: bool, *, probe: bool = False) -> None:
         with self.lock:
             now = self.clock()
             if probe:
@@ -130,19 +137,19 @@ class Breaker:
             if sum(failure for at, failure in self.events if now - at <= 300) >= 10:
                 self.until = now + 60
 
-    def release_probe(self):
+    def release_probe(self) -> None:
         with self.lock:
             self.probing = False
 
 
-def _client(async_mode, options):
+def _client(async_mode: bool, options: dict[str, Any]) -> httpx.Client | httpx.AsyncClient:
     supplied = options.get("async_http_client" if async_mode else "http_client")
     if supplied is not None:
-        return supplied
+        return cast(httpx.Client | httpx.AsyncClient, supplied)
     if not async_mode:
         if not hasattr(_sync, "client"):
             _sync.client = httpx.Client(follow_redirects=False)
-        return _sync.client
+        return cast(httpx.Client, _sync.client)
     loop = asyncio.get_running_loop()
     with _guard:
         if loop not in _async_clients:
@@ -150,21 +157,21 @@ def _client(async_mode, options):
         return _async_clients[loop]
 
 
-async def aclose():
+async def aclose() -> None:
     with _guard:
         client = _async_clients.pop(asyncio.get_running_loop(), None)
     if client is not None:
         await client.aclose()
 
 
-def close():
+def close() -> None:
     if hasattr(_sync, "client"):
         _sync.client.close()
         del _sync.client
 
 
-def options_for(fn):
-    values = {
+def options_for(fn: "Function") -> dict[str, Any]:
+    values: dict[str, Any] = {
         "base_url": os.environ.get("SELDON_BASE_URL", "https://api.seldon-ai.com"),
         "api_key": os.environ.get("SELDON_API_KEY"),
         "timeout": 58,
@@ -191,7 +198,7 @@ def options_for(fn):
     return values
 
 
-def resolve_identity(fn):
+def resolve_identity(fn: "Function") -> tuple[str | None, str | None]:
     if fn.id:
         return fn.id, None
     path = locate(inspect.getsourcefile(fn.original))
@@ -202,10 +209,10 @@ def resolve_identity(fn):
         return None, "not_registered"
     if entry["contract_digest"] != fn.digest:
         return None, "lockfile_stale"
-    return entry["function_id"], None
+    return str(entry["function_id"]), None
 
 
-def _error(response):
+def _error(response: httpx.Response) -> str:
     try:
         body = response.json()
         code = body.get("error", "service_error")
@@ -216,7 +223,7 @@ def _error(response):
         return "service_error"
 
 
-def _raise_response(response):
+def _raise_response(response: httpx.Response) -> NoReturn:
     code, status = _error(response), response.status_code
     kind = (
         SeldonAuthError
@@ -224,21 +231,41 @@ def _raise_response(response):
         else SeldonSpendError
         if status == 402
         else SeldonContractError
-        if status in (400, 422)
+        if status in (400, 422) or status == 409 and code == "contract_digest_mismatch"
         else SeldonError
     )
-    raise kind(code, status=status)
+    try:
+        body = response.json()
+    except ValueError:
+        body = {}
+    fields = (
+        {name: body.get(name) for name in ("param", "execution_id", "correlation_id")}
+        if isinstance(body, dict)
+        else {}
+    )
+    fields = {
+        name: value
+        for name, value in fields.items()
+        if isinstance(value, str) and len(value) <= 240
+    }
+    raise kind(code, status=status, **fields)
 
 
-async def invoke(fn, inputs, *, async_mode):
-    started = time.monotonic()
-    info = CallInfo()
+async def invoke(
+    fn: "Function", inputs: dict[str, Any], *, async_mode: bool, info: CallInfo
+) -> tuple[Any, CallInfo]:
     options = options_for(fn)
-    admitted = False
+    admitted: str | bool = False
     client = _client(async_mode, options)
 
-    async def request(url, body, key, timeout, headers=None):
-        kwargs = {
+    async def request(
+        url: str,
+        body: dict[str, Any],
+        key: str,
+        timeout: float,
+        headers: dict[str, str] | None = None,
+    ) -> httpx.Response:
+        kwargs: dict[str, Any] = {
             "json": body,
             "headers": {
                 "Authorization": "Bearer " + key,
@@ -248,10 +275,11 @@ async def invoke(fn, inputs, *, async_mode):
             "timeout": timeout,
             "follow_redirects": False,
         }
-        result = client.post(url + "/chat/completions", **kwargs)
-        return await result if inspect.isawaitable(result) else result
+        if async_mode:
+            return await cast(httpx.AsyncClient, client).post(url + "/chat/completions", **kwargs)
+        return cast(httpx.Client, client).post(url + "/chat/completions", **kwargs)
 
-    async def reference(reason, cause=None):
+    async def reference(reason: str, cause: Exception | None = None) -> Any:
         info.path, info.reason = "reference", reason
         if options["fallback"] == "never":
             raise cause or SeldonReferenceError(reason)
@@ -260,7 +288,7 @@ async def invoke(fn, inputs, *, async_mode):
         key = options.get("reference_api_key") or (None if different else options["api_key"])
         if not key:
             raise SeldonConfigError("reference_api_key_required")
-        body = {
+        body: dict[str, Any] = {
             key: fn.contract[key]
             for key in ("model", "temperature", "max_tokens", "response_format")
         }
@@ -292,8 +320,8 @@ async def invoke(fn, inputs, *, async_mode):
             if not admitted:
                 return await reference("circuit_open"), info
         headers = {"Idempotency-Key": str(uuid4()), "X-Seldon-Contract-Digest": fn.digest}
-        body = {
-            "model": "seldon/function/" + identity,
+        body: dict[str, Any] = {
+            "model": "seldon/function/" + str(identity),
             "messages": [{"role": "user", "content": canonical(inputs)}],
         }
         for attempt in range(3):
@@ -314,22 +342,28 @@ async def invoke(fn, inputs, *, async_mode):
                 fn.breaker.record(False, probe=admitted == "probe")
                 try:
                     data = response.json()
-                except ValueError:
-                    raise SeldonOutputValidationError("invalid_function_output") from None
-                meta = data.get("seldon", {})
-                info.revision_id, info.execution_id = (
-                    meta.get("revision_id"),
-                    meta.get("execution_id"),
-                )
-                info.server_fallback_used = bool(meta.get("fallback_used"))
-                info.contract_check = response.headers.get("X-Seldon-Contract-Check", "unsupported")
-                info.usage = data.get("usage")
-                try:
+                    if not isinstance(data, dict):
+                        raise ValueError("invalid_response_envelope")
+                    meta = data.get("seldon", {})
+                    if not isinstance(meta, dict):
+                        raise ValueError("invalid_response_metadata")
+                    info.revision_id, info.execution_id = (
+                        meta.get("revision_id"),
+                        meta.get("execution_id"),
+                    )
+                    info.server_fallback_used = bool(meta.get("fallback_used"))
+                    info.contract_check = response.headers.get(
+                        "X-Seldon-Contract-Check", "unsupported"
+                    )
+                    info.usage = data.get("usage")
                     result = fn.output.validate_json(data["choices"][0]["message"]["content"])
                 except (ValueError, ValidationError, KeyError, IndexError, TypeError):
+                    error = SeldonOutputValidationError(
+                        "invalid_function_output", execution_id=info.execution_id
+                    )
                     if options["on_invalid_output"] == "reference":
-                        return await reference("invalid_function_output"), info
-                    raise SeldonOutputValidationError("invalid_function_output") from None
+                        return await reference("invalid_function_output", error), info
+                    raise error from None
                 return result, info
             if status in (401, 402, 403) or status == 429 and code == "api_key_rate_limit":
                 _raise_response(response)
@@ -338,7 +372,7 @@ async def invoke(fn, inputs, *, async_mode):
             if status == 409 and code == "contract_digest_mismatch":
                 warn_once(fn.key, "contract_digest_mismatch: run seldon sync")
                 if options["on_drift"] == "raise":
-                    raise SeldonContractError(code)
+                    _raise_response(response)
                 return await reference(code), info
             if status in (502, 504):
                 fn.breaker.record(True, probe=admitted == "probe")
@@ -366,10 +400,15 @@ async def invoke(fn, inputs, *, async_mode):
     finally:
         if admitted == "probe":
             fn.breaker.release_probe()
-        info.latency_ms = (time.monotonic() - started) * 1000
-        hook = options.get("on_call")
-        if hook:
-            try:
-                hook(info)
-            except Exception:
-                logging.getLogger(__name__).warning("call_metadata_hook_failed")
+
+
+def notify_call(fn: "Function", info: CallInfo, started: float) -> None:
+    """One boundary owns notification, including validation and configuration failure."""
+    info.latency_ms = (time.monotonic() - started) * 1000
+    hook = fn.options.get("on_call", _settings.get("on_call"))
+    if hook:
+        try:
+            hook(info)
+        except Exception:
+            # Hook exceptions can contain payloads; keep the diagnostic content-free.
+            logging.getLogger(__name__).warning("call_metadata_hook_failed")

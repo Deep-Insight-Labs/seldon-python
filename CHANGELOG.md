@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — Complete SDK evidence and runtime contracts
+
+- Fix pre-run evidence import failing for SDK-owned Functions: use the server
+  evaluation-only update, preserving declaration identity and the active alias.
+- Accept exported SDK sources and evaluation definitions without changing defaults
+  or behavior digests.
+- Preserve safe error locations/execution IDs and call the metadata hook exactly
+  once, including input/configuration failures, local execution and stubs.
+- Complete strict source typing and CI checks, lockfile schema/timestamps, public
+  conformance provenance and invalid vectors. Add retry/concurrency/privacy and
+  installed-artifact regression coverage. These sources are not a new PyPI release.
+
 ## 0.1.0.dev0 — local preview
 
 - Add one shared CLI for explicit offline sources, WorkOS user sessions, durable

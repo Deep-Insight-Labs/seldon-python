@@ -1,12 +1,16 @@
 """Conservative AST discovery. No imports, prompt output, network or volume estimates."""
 
 import ast
+from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
 
 EXCLUDED = {".git", ".venv", "venv", "node_modules", "__pycache__"}
 
 
-def scan(path, *, suggest=False, format="existing"):
+def scan(
+    path: str | Path, *, suggest: bool = False, format: str = "existing"
+) -> dict[str, list[dict[str, Any]]]:
     path = Path(path)
     files = [path] if path.is_file() else sorted(path.rglob("*.py"))
     rows = []
@@ -39,7 +43,7 @@ def scan(path, *, suggest=False, format="existing"):
                         elif isinstance(parent.value, ast.Call):
                             clients[target.id] = ast.unparse(parent.value.func)
 
-        def ancestry(node, parents=parents):
+        def ancestry(node: ast.AST, parents: dict[ast.AST, ast.AST] = parents) -> Iterator[ast.AST]:
             while node in parents:
                 node = parents[node]
                 yield node
@@ -69,7 +73,8 @@ def scan(path, *, suggest=False, format="existing"):
                 continue
             keywords = {item.arg: item.value for item in node.keywords if item.arg}
             reasons = []
-            if isinstance(keywords.get("stream"), ast.Constant) and keywords["stream"].value:
+            stream = keywords.get("stream")
+            if isinstance(stream, ast.Constant) and stream.value:
                 reasons.append("streaming")
             if "tools" in keywords:
                 reasons.append("tool_use")
@@ -89,8 +94,9 @@ def scan(path, *, suggest=False, format="existing"):
                 else "none"
             )
             if any(
-                isinstance(keywords.get(key), ast.Name) and keywords[key].id == "str"
+                isinstance(value, ast.Name) and value.id == "str"
                 for key in ("output_type", "result_type")
+                for value in (keywords.get(key),)
             ):
                 structured = "text"
             if source is None:

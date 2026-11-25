@@ -2,11 +2,14 @@
 
 import base64
 import hashlib
+import importlib
 import json
 import os
 import time
 import webbrowser
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any, Protocol, cast
 from urllib.parse import urlencode, urlsplit
 
 import httpx
@@ -18,7 +21,7 @@ WORKOS = "https://api.workos.com"
 DEFAULT_BASE_URL = "https://api.seldon-ai.com"
 
 
-def base_url(value):
+def base_url(value: str) -> str:
     parsed = urlsplit(value)
     if (
         parsed.scheme != "https"
@@ -35,11 +38,17 @@ def base_url(value):
     return value.rstrip("/")
 
 
+class CredentialStore(Protocol):
+    def get(self, key: str) -> str | None: ...
+    def set(self, key: str, token: str) -> bool: ...
+    def delete(self, key: str) -> None: ...
+
+
 class Keychain:
-    def __init__(self):
-        self.backend = None
+    def __init__(self) -> None:
+        self.backend: Any = None
         try:
-            import keyring
+            keyring = importlib.import_module("keyring")
 
             backend = keyring.get_keyring()
             candidates = getattr(backend, "backends", [backend])
@@ -55,15 +64,15 @@ class Keychain:
             # No insecure persistence fallback; callers receive a one-command session.
             self.backend = None
 
-    def get(self, key):
+    def get(self, key: str) -> str | None:
         if self.backend is None:
             return None
         try:
-            return self.backend.get_password("seldon-sdk", key)
+            return cast(str | None, self.backend.get_password("seldon-sdk", key))
         except Exception:
             raise SeldonAuthError("secure_keychain_unavailable") from None
 
-    def set(self, key, token):
+    def set(self, key: str, token: str) -> bool:
         if self.backend is None:
             return False
         try:
@@ -72,7 +81,7 @@ class Keychain:
         except Exception:
             raise SeldonAuthError("secure_keychain_unavailable") from None
 
-    def delete(self, key):
+    def delete(self, key: str) -> None:
         if self.backend is None:
             return
         try:
@@ -85,16 +94,16 @@ class Keychain:
 class Login:
     def __init__(
         self,
-        origin=DEFAULT_BASE_URL,
+        origin: str = DEFAULT_BASE_URL,
         *,
-        profile="default",
-        client_id=None,
-        store=None,
-        config_dir=None,
-        http=None,
-        sleep=time.sleep,
-        clock=time.monotonic,
-    ):
+        profile: str = "default",
+        client_id: str | None = None,
+        store: CredentialStore | None = None,
+        config_dir: str | Path | None = None,
+        http: httpx.Client | None = None,
+        sleep: Callable[[float], None] = time.sleep,
+        clock: Callable[[], float] = time.monotonic,
+    ) -> None:
         self.origin = base_url(origin)
         if not profile or len(profile) > 80:
             raise SeldonConfigError("invalid_profile")
@@ -102,7 +111,7 @@ class Login:
         self.client_id = client_id or os.environ.get("SELDON_WORKOS_CLIENT_ID")
         self.store = store if store is not None else Keychain()
         self.config_dir = Path(
-            config_dir or os.environ.get("SELDON_CONFIG_HOME", Path.home() / ".config/seldon")
+            config_dir or os.environ.get("SELDON_CONFIG_HOME") or Path.home() / ".config/seldon"
         )
         self.key = hashlib.sha256((profile + "\n" + self.origin).encode()).hexdigest()
         profiles_path = self.config_dir / "profiles.json"
@@ -115,10 +124,10 @@ class Login:
                 self.client_id = profile_data.get("client_id")
         self.http = http or httpx.Client(timeout=30, follow_redirects=False)
         self.sleep, self.clock = sleep, clock
-        self._access = None
-        self._claims = None
+        self._access: str | None = None
+        self._claims: dict[str, Any] | None = None
 
-    def _post(self, fields):
+    def _post(self, fields: dict[str, str]) -> tuple[int, dict[str, Any]]:
         if not self.client_id:
             raise SeldonConfigError("workos_client_id_required")
         try:
@@ -138,7 +147,7 @@ class Login:
             raise SeldonAuthError("authentication_unavailable")
         return response.status_code, body
 
-    def _accept(self, data):
+    def _accept(self, data: dict[str, Any]) -> dict[str, Any]:
         access, refresh = data.get("access_token"), data.get("refresh_token")
         if not isinstance(access, str) or not isinstance(refresh, str) or not access or not refresh:
             raise SeldonAuthError("invalid_authentication_response")
@@ -177,7 +186,7 @@ class Login:
             atomic_json(path, profiles)
         return {"authenticated": True, "persisted": persisted, **self.identity(refresh=False)}
 
-    def login(self, display):
+    def login(self, display: Callable[[dict[str, Any]], None]) -> dict[str, Any]:
         if not self.client_id:
             raise SeldonConfigError("workos_client_id_required")
         try:
@@ -226,8 +235,12 @@ class Login:
                 raise SeldonAuthError("device_authorization_declined")
         raise SeldonAuthError("device_authorization_expired")
 
-    def access_token(self):
-        if self._access is not None and self._claims.get("exp", 0) > time.time() + 30:
+    def access_token(self) -> str:
+        if (
+            self._access is not None
+            and self._claims is not None
+            and self._claims.get("exp", 0) > time.time() + 30
+        ):
             return self._access
         refresh = self.store.get(self.key)
         if not refresh:
@@ -238,12 +251,14 @@ class Login:
                 self.store.delete(self.key)
             raise SeldonAuthError("login_required")
         self._accept(body)
+        assert self._access is not None
         return self._access
 
-    def identity(self, *, refresh=True):
+    def identity(self, *, refresh: bool = True) -> dict[str, Any]:
         if refresh or self._claims is None:
             self.access_token()
         claims = self._claims
+        assert claims is not None
         return {
             "user_id": claims["sub"],
             "workspace": claims.get("org_id") or claims.get("organization_id"),
@@ -253,10 +268,11 @@ class Login:
             "profile": self.profile,
         }
 
-    def logout(self, *, open_browser=webbrowser.open):
+    def logout(self, *, open_browser: Callable[[str], object] = webbrowser.open) -> dict[str, Any]:
         remote = "unavailable"
         try:
             self.access_token()
+            assert self._claims is not None
             sid = self._claims.get("sid")
             if isinstance(sid, str) and sid.startswith("session_"):
                 url = WORKOS + "/user_management/sessions/logout?" + urlencode({"session_id": sid})
@@ -268,7 +284,9 @@ class Login:
             self._access = self._claims = None
         return {"local_credentials_deleted": True, "remote_logout": remote}
 
-    def logout_all(self, *, open_browser=webbrowser.open):
+    def logout_all(
+        self, *, open_browser: Callable[[str], object] = webbrowser.open
+    ) -> list[dict[str, Any]]:
         path = self.config_dir / "profiles.json"
         profiles = read_json(path) if path.exists() else {}
         results = []

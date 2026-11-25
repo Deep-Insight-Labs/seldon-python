@@ -2,10 +2,13 @@
 
 import argparse
 import asyncio
+import importlib
 import importlib.resources
 import json
 import os
 import sys
+from collections.abc import Callable, Sequence
+from typing import Any
 
 import httpx
 
@@ -16,7 +19,7 @@ from .files import Association, atomic_json, digest, read_json, resolve_function
 from .management import Management
 
 
-def parser():
+def parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(prog="seldon")
     root.add_argument("--version", action="version", version=__version__)
     root.add_argument("--base-url", default=os.environ.get("SELDON_BASE_URL", DEFAULT_BASE_URL))
@@ -112,17 +115,17 @@ def parser():
     return root
 
 
-def emit(value):
+def emit(value: Any) -> None:
     print(json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2, allow_nan=False))
 
 
-def _confirmation(summary):
+def _confirmation(summary: dict[str, Any]) -> bool:
     emit(summary)
     value = summary.get("revision_id") or summary["function_id"]
-    return input("Type the displayed revision or Function id to confirm: ").strip() == value
+    return bool(input("Type the displayed revision or Function id to confirm: ").strip() == value)
 
 
-def _local(args):
+def _local(args: argparse.Namespace) -> Any:
     identity = resolve_function(args.function)
     key = os.environ.get("SELDON_API_KEY")
     if not key:
@@ -153,11 +156,11 @@ def _local(args):
             "verification": "not_run",
         }
     try:
-        from seldon_runtime.runner import Runner
+        Runner = importlib.import_module("seldon_runtime.runner").Runner
     except ImportError:
         raise SeldonError("install_seldon_runtime_gliner_extra") from None
 
-    async def execute():
+    async def execute() -> Any:
         runner = await Runner.load(
             identity,
             key,
@@ -179,7 +182,13 @@ def _local(args):
     return asyncio.run(execute())
 
 
-def main(argv=None, *, login=None, interactive=None, confirm=None):
+def main(
+    argv: Sequence[str] | None = None,
+    *,
+    login: Login | None = None,
+    interactive: bool | None = None,
+    confirm: Callable[[dict[str, Any]], bool] | None = None,
+) -> int:
     args = parser().parse_args(argv)
     try:
         if args.command == "skill":

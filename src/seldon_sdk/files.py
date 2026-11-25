@@ -6,6 +6,7 @@ import os
 import re
 import tempfile
 from pathlib import Path
+from typing import Any, NoReturn, cast
 from uuid import UUID
 
 from .errors import SeldonContractError
@@ -30,21 +31,21 @@ REQUEST_FIELDS = {
 }
 
 
-def canonical(value):
+def canonical(value: Any) -> str:
     return json.dumps(
         value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False
     )
 
 
-def digest(value):
+def digest(value: Any) -> str:
     return hashlib.sha256(canonical(value).encode()).hexdigest()
 
 
-def _invalid_constant(_value):
+def _invalid_constant(_value: str) -> NoReturn:
     raise SeldonContractError("nonfinite_json")
 
 
-def read_json(path):
+def read_json(path: str | Path) -> Any:
     try:
         with Path(path).open("rb") as source:
             raw = source.read(MAX_FILE_BYTES + 1)
@@ -55,7 +56,7 @@ def read_json(path):
         raise SeldonContractError("invalid_json_file") from None
 
 
-def atomic_json(path, data):
+def atomic_json(path: str | Path, data: Any) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, temporary = tempfile.mkstemp(dir=path.parent)
@@ -68,10 +69,10 @@ def atomic_json(path, data):
             os.unlink(temporary)
 
 
-def bounded_json(value):
+def bounded_json(value: Any) -> None:
     count = 0
 
-    def visit(item, depth):
+    def visit(item: Any, depth: int) -> None:
         nonlocal count
         count += 1
         if depth > 32 or count > 20000:
@@ -93,7 +94,7 @@ def bounded_json(value):
         raise SeldonContractError("invalid_json") from None
 
 
-def _request(call):
+def _request(call: Any) -> None:
     if not isinstance(call, dict) or set(call) - REQUEST_FIELDS - {"id"}:
         raise SeldonContractError("unsupported_request_option")
     if not isinstance(call.get("model"), str) or not call["model"]:
@@ -135,12 +136,113 @@ def _request(call):
             raise SeldonContractError("invalid_temperature")
 
 
-def validate_source(source):
+def _sdk_source(source: dict[str, Any]) -> None:
+    """Check the public SDK envelope; keep declared bytes and evidence untouched."""
+    from .contract import bounded_schema
+
+    required = {"kind", "key", "contract", "digest", "example_inputs"}
+    if (
+        not required <= source.keys()
+        or set(source) - required - {"evaluation"}
+        or not isinstance(source["key"], str)
+        or not 1 <= len(source["key"]) <= 240
+        or not isinstance(source["example_inputs"], dict)
+    ):
+        raise SeldonContractError("invalid_sdk_contract")
+    contract = source["contract"]
+    fields = {
+        "version",
+        "model",
+        "temperature",
+        "max_tokens",
+        "messages",
+        "input_schema",
+        "output_schema",
+        "response_format",
+    }
+    if not isinstance(contract, dict) or set(contract) != fields:
+        raise SeldonContractError("invalid_sdk_contract")
+    if len(canonical(contract).encode()) > 262144:
+        raise SeldonContractError("request_too_large")
+    if contract["version"] != "seldon-sdk-contract-v1":
+        raise SeldonContractError("unsupported_sdk_contract")
+    if not isinstance(source["digest"], str) or not re.fullmatch(r"[0-9a-f]{64}", source["digest"]):
+        raise SeldonContractError("invalid_sdk_contract")
+    if digest(contract) != source["digest"]:
+        raise SeldonContractError("contract_digest_mismatch")
+    _request({key: value for key, value in contract.items() if key in REQUEST_FIELDS})
+    if contract["temperature"] is None or contract["max_tokens"] is None:
+        raise SeldonContractError("invalid_sdk_contract")
+    for name in ("input_schema", "output_schema"):
+        if not isinstance(contract[name], dict):
+            raise SeldonContractError("invalid_sdk_contract")
+        bounded_schema(contract[name])
+    if contract["input_schema"].get("type") != "object":
+        raise SeldonContractError("invalid_sdk_contract")
+    if contract["output_schema"].get("type") not in {"object", "array"}:
+        raise SeldonContractError("unsupported_output_type")
+    response = contract["response_format"]
+    if (
+        not isinstance(response, dict)
+        or response.get("type") != "json_schema"
+        or not isinstance(response.get("json_schema"), dict)
+        or response["json_schema"].get("schema") != contract["output_schema"]
+    ):
+        raise SeldonContractError("sdk_output_schema_mismatch")
+    parameters = contract["input_schema"].get("properties", {})
+    if not isinstance(parameters, dict):
+        raise SeldonContractError("invalid_sdk_contract")
+    used = set()
+    for index, message in enumerate(contract["messages"]):
+        names = re.findall(r"\{([A-Za-z]\w*)\}", message["content"])
+        if len(names) != len(set(names)) or set(names) - parameters.keys():
+            raise SeldonContractError("invalid_sdk_binding", param=f"messages[{index}]")
+        used.update(names)
+    if used != parameters.keys():
+        raise SeldonContractError("invalid_sdk_binding")
+    evaluation = source.get("evaluation")
+    if evaluation is not None:
+        if not isinstance(evaluation, dict):
+            raise SeldonContractError("invalid_evaluation")
+        instructions = evaluation.get("instructions")
+        criteria, checks = evaluation.get("criteria", []), evaluation.get("checks", [])
+        if (
+            not isinstance(instructions, str)
+            or not 1 <= len(instructions) <= 8192
+            or not isinstance(criteria, list)
+            or len(criteria) > 6
+            or any(not isinstance(item, str) for item in criteria)
+            or not isinstance(checks, list)
+            or len(checks) > 16
+            or any(
+                not isinstance(check, dict)
+                or check.get("kind")
+                not in {
+                    "schema",
+                    "collection",
+                    "spans",
+                    "quotes",
+                    "enum",
+                    "exact",
+                    "records",
+                    "decimal",
+                }
+                for check in checks
+            )
+        ):
+            raise SeldonContractError("invalid_evaluation")
+        _validate_examples(evaluation.get("examples", []))
+
+
+def validate_source(source: Any) -> dict[str, Any] | list[Any]:
     """Validate the public source envelope without defaulting or rewriting its contents.
 
     The server remains authoritative for evaluator, provider and runtime eligibility.
     """
     bounded_json(source)
+    if isinstance(source, dict) and source.get("kind") == "sdk":
+        _sdk_source(source)
+        return source
     if isinstance(source, list):
         calls = source
     elif isinstance(source, dict) and "calls" in source:
@@ -199,10 +301,10 @@ def validate_source(source):
         raise SeldonContractError("workflow_call_limit")
     for call in calls:
         _request(call)
-    return source
+    return cast(dict[str, Any] | list[Any], source)
 
 
-def resolve_function(locator, lockfile=None):
+def resolve_function(locator: str, lockfile: str | Path | None = None) -> str:
     if not isinstance(locator, str):
         raise SeldonContractError("function_identity_required")
     if locator.startswith("seldon/function/"):
@@ -227,10 +329,10 @@ def resolve_function(locator, lockfile=None):
 
 
 class Association:
-    def __init__(self, path):
+    def __init__(self, path: str | Path) -> None:
         self.path = Path(path)
 
-    def read(self):
+    def read(self) -> dict[str, Any]:
         if not self.path.exists():
             return {}
         value = read_json(self.path)
@@ -238,7 +340,7 @@ class Association:
             raise SeldonContractError("invalid_association")
         return value
 
-    def save(self, values):
+    def save(self, values: dict[str, Any]) -> None:
         allowed = {
             "source_file",
             "source_digest",
@@ -260,19 +362,19 @@ class Association:
             raise SeldonContractError("invalid_association_field")
         atomic_json(self.path, {"version": "seldon-operation-v1", **values})
 
-    def update(self, **values):
+    def update(self, **values: Any) -> None:
         old = self.read()
         old.pop("version", None)
         self.save({**old, **values})
 
-    def require_source(self, source_digest):
+    def require_source(self, source_digest: str) -> dict[str, Any]:
         state = self.read()
         if state.get("source_digest") not in (None, source_digest):
             raise SeldonContractError("source_changed_reimport_required")
         return state
 
 
-def safe_code(value, default="service_error"):
+def safe_code(value: Any, default: str = "service_error") -> str:
     return (
         value
         if isinstance(value, str) and re.fullmatch(r"[a-z][a-z0-9_]{0,79}", value)
@@ -280,7 +382,7 @@ def safe_code(value, default="service_error"):
     )
 
 
-def read_examples(path):
+def read_examples(path: str | Path) -> list[dict[str, Any]]:
     path = Path(path)
     if path.suffix.lower() == ".jsonl":
         try:
@@ -295,6 +397,10 @@ def read_examples(path):
             raise SeldonContractError("invalid_examples_file") from None
     else:
         examples = read_json(path)
+    return _validate_examples(examples)
+
+
+def _validate_examples(examples: Any) -> list[dict[str, Any]]:
     if not isinstance(examples, list) or len(examples) > 400:
         raise SeldonContractError("evaluation_examples_limit")
     bounded_json(examples)

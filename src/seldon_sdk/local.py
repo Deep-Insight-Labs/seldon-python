@@ -1,27 +1,29 @@
 """Typed adapter over the public Runner; it owns eligibility and local fallback."""
 
 import asyncio
-import time
-import weakref
+import importlib
+from typing import TYPE_CHECKING, Any
 
 from .errors import SeldonConfigError, SeldonError, SeldonOutputValidationError
 from .files import safe_code
 from .runtime import CallInfo, options_for, resolve_identity
 
+if TYPE_CHECKING:
+    from .decorator import Function
 
-async def invoke_local(fn, inputs):
-    started = time.monotonic()
+
+async def invoke_local(
+    fn: "Function", inputs: dict[str, Any], *, info: CallInfo
+) -> tuple[Any, CallInfo]:
     options = options_for(fn)
     identity, reason = resolve_identity(fn)
     if reason:
         raise SeldonConfigError("registered_function_required_for_local_execution")
     try:
-        from seldon_runtime.runner import Runner
+        Runner = importlib.import_module("seldon_runtime.runner").Runner
     except ImportError:
         raise SeldonConfigError("install_seldon_runtime_gliner_extra") from None
     loop = asyncio.get_running_loop()
-    if not hasattr(fn, "local_runners"):
-        fn.local_runners = weakref.WeakKeyDictionary()
     runner = fn.local_runners.get(loop)
     if runner is None:
         # load() includes eligibility, integrity and conformance checks. Never opt out here.
@@ -33,7 +35,7 @@ async def invoke_local(fn, inputs):
             telemetry=fn.options.get("telemetry", True),
         )
         fn.local_runners[loop] = runner
-    info = CallInfo(path="local", function_id=identity)
+    info.function_id = identity
     try:
         result = await runner(inputs)
         info.revision_id = runner.status()["revision_id"]
@@ -52,18 +54,9 @@ async def invoke_local(fn, inputs):
         if not fn.is_async:
             await runner.aclose()
             fn.local_runners.pop(loop, None)
-        info.latency_ms = (time.monotonic() - started) * 1000
-        hook = options.get("on_call")
-        if hook:
-            try:
-                hook(info)
-            except Exception:
-                import logging
-
-                logging.getLogger(__name__).warning("call_metadata_hook_failed")
 
 
-async def close_local(fn):
+async def close_local(fn: "Function") -> None:
     runner = getattr(fn, "local_runners", {}).pop(asyncio.get_running_loop(), None)
     if runner is not None:
         await runner.aclose()

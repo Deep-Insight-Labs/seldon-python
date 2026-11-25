@@ -1,5 +1,13 @@
 """Explicit module exports and content-free local/remote drift inspection."""
 
+from __future__ import annotations
+
+from collections.abc import Iterator, Sequence
+from typing import TYPE_CHECKING, Any, NoReturn
+
+if TYPE_CHECKING:
+    from .management import Management
+
 import importlib
 import inspect
 import socket
@@ -16,9 +24,8 @@ from .lockfile import locate, read, set_entry
 
 
 @contextmanager
-def offline_imports():
-    # This protects ordinary accidental network effects, not hostile Python code.
-    def blocked(*args, **kwargs):
+def offline_imports() -> Iterator[None]:
+    def blocked(*args: Any, **kwargs: Any) -> NoReturn:
         raise SeldonContractError("module_network_access_forbidden")
 
     with (
@@ -29,7 +36,7 @@ def offline_imports():
         yield
 
 
-def declarations(modules):
+def declarations(modules: Sequence[str]) -> dict[str, Function]:
     with offline_imports():
         # The explicit module belongs to the invoking application, even for a console shim.
         root = str(Path.cwd())
@@ -43,8 +50,8 @@ def declarations(modules):
                 sys.path.remove(root)
 
 
-def _declarations(modules):
-    found = {}
+def _declarations(modules: Sequence[str]) -> dict[str, Function]:
+    found: dict[str, Function] = {}
     for name in modules:
         module = importlib.import_module(name)
         for candidate in vars(module).values():
@@ -55,7 +62,7 @@ def _declarations(modules):
     return dict(sorted(found.items()))
 
 
-def exported(modules, path):
+def exported(modules: Sequence[str], path: str | Path) -> tuple[dict[str, Any], int]:
     rows, sources = [], []
     for key, fn in declarations(modules).items():
         if fn.example is None:
@@ -67,7 +74,7 @@ def exported(modules, path):
     return {"items": rows, "source_file": str(path)}, int(any("error" in row for row in rows))
 
 
-def lock_set(module, key, identity):
+def lock_set(module: str, key: str, identity: str) -> dict[str, str]:
     identity = resolve_function(identity)
     functions = declarations([module])
     if key not in functions:
@@ -86,11 +93,10 @@ def lock_set(module, key, identity):
     return {"key": key, "function_id": identity, "lockfile": str(path)}
 
 
-def contract_parts(contract):
-    # Digest each field separately to name changes without persisting prompt contents.
+def contract_parts(contract: dict[str, Any]) -> dict[str, str]:
     parts = {}
 
-    def walk(value, pointer):
+    def walk(value: Any, pointer: str) -> None:
         if isinstance(value, dict):
             for key in sorted(value):
                 walk(value[key], pointer + "/" + key.replace("~", "~0").replace("/", "~1"))
@@ -104,12 +110,14 @@ def contract_parts(contract):
     return parts
 
 
-def check_modules(modules, *, api=None, allow_pending=False):
+def check_modules(
+    modules: Sequence[str], *, api: Management | None = None, allow_pending: bool = False
+) -> tuple[dict[str, Any], int]:
     rows = []
     for key, fn in declarations(modules).items():
         path = locate(inspect.getsourcefile(fn.original))
         entry = read(path)["functions"].get(key) if path.exists() else None
-        row = {"key": key, "status": "unregistered"}
+        row: dict[str, Any] = {"key": key, "status": "unregistered"}
         if entry:
             row["status"] = "unchanged" if entry["contract_digest"] == fn.digest else "stale_lock"
             parts = contract_parts(fn.contract)
@@ -141,7 +149,7 @@ def check_modules(modules, *, api=None, allow_pending=False):
     )
 
 
-def sync_modules(modules, api):
+def sync_modules(modules: Sequence[str], api: Management) -> tuple[dict[str, Any], int]:
     from .management import FUNCTIONS
 
     # Authentication occurs before importing application code or sending any request.
@@ -169,7 +177,9 @@ def sync_modules(modules, api):
     return result, int(any(row.get("error") for row in result["items"]))
 
 
-def check_template(api, function, path, syntax):
+def check_template(
+    api: Management, function: str, path: str | Path, syntax: str
+) -> tuple[dict[str, Any], int]:
     import re
     import string
 
@@ -179,6 +189,8 @@ def check_template(api, function, path, syntax):
     messages = (
         data.get("messages") if isinstance(data, dict) else [{"role": "user", "content": data}]
     )
+    if not isinstance(messages, list):
+        raise SeldonContractError("invalid_template_source")
     changed = []
     if remote.get("template_syntax") != syntax:
         changed.append("syntax")

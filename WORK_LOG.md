@@ -53,13 +53,13 @@ release/production activation and the external acceptance below are independent.
 
 ### Contracts and degradation
 
-| Dependency | Interface and seam | Failure behavior |
-| --- | --- | --- |
-| Seldon management | sync httpx; injected Login/http | bounded error, no automatic mutation retry; uncertain create requires explicit reconciliation |
-| WorkOS device/refresh | sync httpx, store/sleep/clock seams | bounded polling; no API-key fallback; rotate refresh token before downstream verification |
-| OS credentials | sync keyring allowlisted backend or injected store | memory-only when unavailable at discovery, explicit error when configured storage fails |
-| Function/reference execution | sync thread client or async loop client; injected client | bounded retry; explicit fallback matrix; auth/funding/input errors never fall back |
-| Local Runner | async public load/call/status/aclose | runtime owns eligibility/conformance/refresh; no unverified typed execution |
+| Dependency                   | Interface and seam                                       | Failure behavior                                                                              |
+| ---------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Seldon management            | sync httpx; injected Login/http                          | bounded error, no automatic mutation retry; uncertain create requires explicit reconciliation |
+| WorkOS device/refresh        | sync httpx, store/sleep/clock seams                      | bounded polling; no API-key fallback; rotate refresh token before downstream verification     |
+| OS credentials               | sync keyring allowlisted backend or injected store       | memory-only when unavailable at discovery, explicit error when configured storage fails       |
+| Function/reference execution | sync thread client or async loop client; injected client | bounded retry; explicit fallback matrix; auth/funding/input errors never fall back            |
+| Local Runner                 | async public load/call/status/aclose                     | runtime owns eligibility/conformance/refresh; no unverified typed execution                   |
 
 Source and evidence files stay local until an explicit import. Local associations
 hold identifiers/digests/paths only. Auth profiles bind credentials to profile+HTTPS
@@ -178,3 +178,39 @@ published the original files to PyPI. PyPI SHA-256 matched the downloaded build:
 
 Source revision `958ab5b`, tag `v0.1.0.dev0`. Package publication and backend
 feature activation have separate evidence.
+
+## 2026-11-25 — Required implementation gap closure on main
+
+Required SDK code gaps are addressed locally. The management client uses an
+explicit evaluation-only draft update instead of resubmitting SDK-owned source.
+Exported SDK sources and optional evaluator definitions validate without changing
+request defaults. Server registration preserves separately imported evidence on
+unchanged sync. The matching server must deploy before a new CLI release uses
+this endpoint; the published preview remains unchanged.
+
+Error objects preserve safe location/execution/correlation metadata. A single
+Function boundary calls the metadata hook once for input/configuration failures,
+hosted/local execution and stubs. Invalid JSON/envelopes respect explicit output
+fallback. Drift remains a contract error. Regression tests were red before fixes.
+Source strict typing now passes and CI enforces it plus public consumer typing.
+One narrowly scoped overlap annotation in the callable stub preserves async typing;
+strict settings are unchanged. Lockfiles have a packaged schema and stable
+registration timestamps while legacy entries remain readable.
+
+The shared synthetic corpus has 32 valid and 8 invalid cases, with source revision
+and corpus/exporter hashes under conformance/SOURCE. Public-content checks run in
+pytest. Deliberate differences between local and server rejection codes remain
+explicit. Broad scanning and suggested decorators remain optional deferred work.
+
+Validation on macOS: owning SDK suite 114 passed; Ruff, formatting and strict
+source/consumer mypy passed. A built wheel installed in fresh environments from an
+unrelated working directory passed all 114 tests for each Python 3.10/3.13 and
+Pydantic 2.11.0/2.14.4 combination. Build/twine and fresh base-only console/import/
+stub artifact checks passed. The suite covers retries/idempotency, exclusive
+breaker probes, 100 async calls across two loops, 20 simultaneous threads, private
+payload omission and hook failures, plus repeated import/decoration budgets.
+Server-owned actual HTTP/persistence tests also exercised both installed CLI
+integration formats with representative synthetic examples, compiler jobs,
+publish, activation, invocation and cleanup; these prove integration, not quality.
+No package was published, no production state changed, and no live secure-store
+qualification was rerun. Other-platform authentication remains separately unverified.

@@ -22,7 +22,7 @@ jobs:
       - if: matrix.pydantic != 'latest'
         run: python -m pip install 'pydantic==${{ matrix.pydantic }}'
       - run: python -m ruff check . && python -m ruff format --check .
-      - run: python -m mypy scripts/typecheck_example.py --strict
+      - run: python -m mypy --strict src/seldon_sdk && python -m mypy scripts/typecheck_example.py --strict
       - run: python -m pytest -q
       - run: python -m build
       - run: python -m twine check dist/*

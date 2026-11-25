@@ -1,0 +1,4 @@
+financial document classifier
+vector-orchestrator
+seldon-prod-centralus
+0532dd3b-935d-410a-896d-77906a40ac93

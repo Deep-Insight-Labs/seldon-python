@@ -3,9 +3,10 @@
 import inspect
 import re
 import string
-from typing import get_type_hints
+from collections.abc import Callable, Collection, Sequence
+from typing import Any, cast, get_type_hints
 
-from pydantic import ConfigDict, TypeAdapter, create_model
+from pydantic import BaseModel, ConfigDict, TypeAdapter, create_model
 
 from .errors import SeldonContractError
 from .files import ROLES, canonical
@@ -13,7 +14,7 @@ from .files import ROLES, canonical
 TOKEN = re.compile(r"\{\{[A-Za-z]\w*\}\}|(?<!\{)\{([A-Za-z]\w*)\}(?!\})")
 
 
-def template(text, parameters):
+def template(text: str | None, parameters: Collection[str]) -> tuple[str, list[str]]:
     if not isinstance(text, str) or len(text.encode()) > 262144:
         raise SeldonContractError("message_too_large")
     pieces, used, literal_parts = [], [], []
@@ -39,43 +40,60 @@ def template(text, parameters):
     return "".join(pieces), used
 
 
-def bounded_schema(schema):
+def bounded_schema(schema: dict[str, Any]) -> dict[str, Any]:
     nodes = 0
 
-    def walk(value, depth=0, refs=()):
+    def walk(value: Any, depth: int = 0, refs: tuple[str, ...] = (), pointer: str = "") -> None:
         nonlocal nodes
         nodes += 1
         if depth > 24 or nodes > 2048:
-            raise SeldonContractError("schema_complexity_limit")
+            raise SeldonContractError("schema_complexity_limit", param=pointer)
         if isinstance(value, dict):
             if set(value) & {"pattern", "patternProperties", "$dynamicRef", "$recursiveRef", "$id"}:
-                raise SeldonContractError("unsupported_schema_keyword")
+                raise SeldonContractError(
+                    "unsupported_schema_keyword",
+                    param=pointer
+                    + "/"
+                    + sorted(
+                        set(value)
+                        & {"pattern", "patternProperties", "$dynamicRef", "$recursiveRef", "$id"}
+                    )[0],
+                )
             if "$ref" in value:
                 ref = value["$ref"]
                 if not isinstance(ref, str) or not ref.startswith("#/") or ref in refs:
-                    raise SeldonContractError("unsupported_schema_reference")
+                    raise SeldonContractError(
+                        "unsupported_schema_reference", param=pointer + "/$ref"
+                    )
                 target = schema
                 try:
                     for key in ref[2:].split("/"):
                         target = target[key.replace("~1", "/").replace("~0", "~")]
                 except (KeyError, TypeError):
-                    raise SeldonContractError("invalid_schema_reference") from None
-                walk(target, depth + 1, refs + (ref,))
+                    raise SeldonContractError(
+                        "invalid_schema_reference", param=pointer + "/$ref"
+                    ) from None
+                walk(target, depth + 1, refs + (ref,), pointer + "/$ref")
             for key, child in value.items():
                 if key != "$ref":
-                    walk(child, depth + 1, refs)
+                    walk(
+                        child,
+                        depth + 1,
+                        refs,
+                        pointer + "/" + key.replace("~", "~0").replace("/", "~1"),
+                    )
         elif isinstance(value, list):
-            for child in value:
-                walk(child, depth + 1, refs)
+            for index, child in enumerate(value):
+                walk(child, depth + 1, refs, pointer + "/" + str(index))
 
     walk(schema)
     return schema
 
 
-def normalized_output(schema):
+def normalized_output(schema: dict[str, Any]) -> dict[str, Any]:
     bounded_schema(schema)
 
-    def normalize(value):
+    def normalize(value: Any) -> Any:
         if isinstance(value, list):
             return [normalize(item) for item in value]
         if not isinstance(value, dict):
@@ -95,13 +113,13 @@ def normalized_output(schema):
                 result["type"] = [nonnull["type"], "null"]
         return result
 
-    return normalize(schema)
+    return cast(dict[str, Any], normalize(schema))
 
 
-def strict_schema(schema):
+def strict_schema(schema: dict[str, Any]) -> tuple[bool, list[str]]:
     reasons = []
 
-    def visit(value):
+    def visit(value: Any) -> None:
         if isinstance(value, dict):
             if value.get("type") == "object" and value.get("additionalProperties") is not False:
                 reasons.append("open_object")
@@ -117,7 +135,16 @@ def strict_schema(schema):
     return not reasons, sorted(set(reasons))
 
 
-def build(fn, *, model, prompt=None, system=None, messages=None, temperature=0, max_tokens=2048):
+def build(
+    fn: Callable[..., Any],
+    *,
+    model: str | None,
+    prompt: str | None = None,
+    system: str | None = None,
+    messages: Sequence[tuple[str, str]] | None = None,
+    temperature: float = 0,
+    max_tokens: int = 2048,
+) -> tuple[inspect.Signature, type[BaseModel], TypeAdapter[Any], dict[str, Any], list[str]]:
     if not isinstance(model, str) or not model:
         raise SeldonContractError("missing_model")
     if (
@@ -130,7 +157,7 @@ def build(fn, *, model, prompt=None, system=None, messages=None, temperature=0, 
         raise SeldonContractError("invalid_max_tokens")
     signature = inspect.signature(fn)
     hints = get_type_hints(fn)
-    fields = {}
+    fields: dict[str, Any] = {}
     for name, parameter in signature.parameters.items():
         if name in {"self", "cls"} or parameter.kind in {
             parameter.POSITIONAL_ONLY,
@@ -162,10 +189,13 @@ def build(fn, *, model, prompt=None, system=None, messages=None, temperature=0, 
     if not isinstance(selected, (list, tuple)) or not 1 <= len(selected) <= 32:
         raise SeldonContractError("message_limit")
     prepared, used = [], set()
-    for message in selected:
+    for index, message in enumerate(selected):
         if not isinstance(message, (list, tuple)) or len(message) != 2 or message[0] not in ROLES:
             raise SeldonContractError("unsupported_message_role")
-        content, names = template(message[1], fields)
+        try:
+            content, names = template(message[1], fields)
+        except SeldonContractError as error:
+            raise SeldonContractError(error.code, param=f"messages[{index}]") from None
         used.update(names)
         prepared.append({"role": message[0], "content": content})
     if set(fields) != used:
@@ -189,8 +219,8 @@ def build(fn, *, model, prompt=None, system=None, messages=None, temperature=0, 
     return signature, inputs, output, contract, reasons
 
 
-def render(contract, inputs):
-    def replace(match):
+def render(contract: dict[str, Any], inputs: dict[str, Any]) -> list[dict[str, str]]:
+    def replace(match: re.Match[str]) -> str:
         value = inputs[match.group(1)]
         return value if isinstance(value, str) else canonical(value)
 

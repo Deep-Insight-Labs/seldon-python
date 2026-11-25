@@ -2,12 +2,15 @@
 
 import math
 import time
+from collections.abc import Callable
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
+from typing import Any
 from uuid import UUID, uuid4
 
 import httpx
 
+from .auth import Login
 from .errors import SeldonAuthError, SeldonContractError, SeldonError, SeldonSpendError
 from .files import Association, digest, read_json, resolve_function, safe_code, validate_source
 
@@ -15,13 +18,26 @@ FUNCTIONS = "/v1/seldon/functions"
 
 
 class Management:
-    def __init__(self, login, *, association=".seldon/operation.json", http=None):
+    def __init__(
+        self,
+        login: Login,
+        *,
+        association: str | Path = ".seldon/operation.json",
+        http: httpx.Client | None = None,
+    ) -> None:
         self.login = login
         self.origin = login.origin
         self.http = http or login.http
         self.association = Association(association)
 
-    def request(self, method, path, body=None, *, params=None):
+    def request(
+        self,
+        method: str,
+        path: str,
+        body: dict[str, Any] | None = None,
+        *,
+        params: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         try:
             response = self.http.request(
                 method,
@@ -56,7 +72,7 @@ class Management:
             raise SeldonError("invalid_service_response")
         return data
 
-    def detail(self, function, *, run_id=None):
+    def detail(self, function: str, *, run_id: str | None = None) -> dict[str, Any]:
         function = resolve_function(function)
         params = {"run_id": str(UUID(run_id))} if run_id else None
         detail = self.request("GET", FUNCTIONS + "/" + function, params=params)
@@ -68,7 +84,14 @@ class Management:
                 raise SeldonAuthError("association_workspace_mismatch")
         return detail
 
-    def import_source(self, path, *, function=None, name="Selected operation", offline=False):
+    def import_source(
+        self,
+        path: str | Path,
+        *,
+        function: str | None = None,
+        name: str = "Selected operation",
+        offline: bool = False,
+    ) -> dict[str, Any]:
         source = validate_source(read_json(path))
         source_digest = digest(source)
         state = self.association.read()
@@ -146,7 +169,7 @@ class Management:
             ],
         }
 
-    def _state(self, function):
+    def _state(self, function: str) -> dict[str, Any]:
         state = self.association.read()
         if state.get("function_id") == function:
             path = state.get("source_file")
@@ -159,7 +182,7 @@ class Management:
                     raise SeldonContractError("evidence_changed_import_required")
         return state
 
-    def status(self, function=None):
+    def status(self, function: str | None = None) -> dict[str, Any]:
         if function is None:
             from .lockfile import locate, read
 
@@ -205,7 +228,7 @@ class Management:
         return result
 
     @staticmethod
-    def _summary(detail):
+    def _summary(detail: dict[str, Any]) -> dict[str, Any]:
         return {
             key: detail.get(key)
             for key in (
@@ -219,7 +242,7 @@ class Management:
             )
         }
 
-    def report(self, function, *, run_id=None):
+    def report(self, function: str, *, run_id: str | None = None) -> dict[str, Any]:
         function = resolve_function(function)
         state = self.association.read()
         if run_id is None and state.get("function_id") == function:
@@ -247,19 +270,19 @@ class Management:
 
     def optimize(
         self,
-        function,
+        function: str,
         *,
-        cap,
-        objective="cost",
-        max_p95_ms=None,
-        authorize=False,
-        wait=False,
-        timeout=600,
-        new_run=False,
-        source_run=None,
-        sleep=time.sleep,
-        clock=time.monotonic,
-    ):
+        cap: str | float | Decimal,
+        objective: str = "cost",
+        max_p95_ms: float | None = None,
+        authorize: bool = False,
+        wait: bool = False,
+        timeout: float = 600,
+        new_run: bool = False,
+        source_run: str | None = None,
+        sleep: Callable[[float], None] = time.sleep,
+        clock: Callable[[], float] = time.monotonic,
+    ) -> tuple[dict[str, Any], int]:
         function = resolve_function(function)
         try:
             budget = Decimal(str(cap))
@@ -303,7 +326,7 @@ class Management:
                 cap_usd=str(budget),
                 run_id=None,
             )
-            policy = {"objective": objective}
+            policy: dict[str, Any] = {"objective": objective}
             if max_p95_ms is not None:
                 if not math.isfinite(max_p95_ms) or max_p95_ms <= 0:
                     raise SeldonContractError("invalid_latency_target")
@@ -365,7 +388,7 @@ class Management:
             if run is None:
                 raise SeldonError("associated_run_unavailable")
 
-    def cancel(self, function, run_id):
+    def cancel(self, function: str, run_id: str) -> dict[str, Any]:
         return self._summary(
             self.request(
                 "POST", f"{FUNCTIONS}/{resolve_function(function)}/runs/{UUID(run_id)}/cancel"
@@ -374,15 +397,15 @@ class Management:
 
     def activate(
         self,
-        function,
-        revision,
+        function: str,
+        revision: str | None,
         *,
-        publish=False,
-        alternative=None,
-        confirm,
-        interactive,
-        managed_fallback_approved=False,
-    ):
+        publish: bool = False,
+        alternative: int | None = None,
+        confirm: Callable[[dict[str, Any]], bool],
+        interactive: bool,
+        managed_fallback_approved: bool = False,
+    ) -> tuple[dict[str, Any], int]:
         if not interactive:
             raise SeldonAuthError("interactive_owner_confirmation_required")
         self.login.access_token()
@@ -397,6 +420,8 @@ class Management:
             revision = choices[alternative - 1].get("revision_id")
             if revision is None:
                 raise SeldonContractError("alternative_not_deployable")
+        if revision is None:
+            raise SeldonContractError("revision_unavailable")
         revision = str(UUID(revision))
         selected = next(
             (item for item in detail.get("revisions", []) if str(item["id"]) == revision), None
@@ -433,7 +458,14 @@ class Management:
         self.association.update(revision_id=revision)
         return self._summary(result), 0
 
-    def serve_reference(self, function, *, acknowledge_deadline_risk=False, confirm, interactive):
+    def serve_reference(
+        self,
+        function: str,
+        *,
+        acknowledge_deadline_risk: bool = False,
+        confirm: Callable[[dict[str, Any]], bool],
+        interactive: bool,
+    ) -> tuple[dict[str, Any], int]:
         if not interactive:
             raise SeldonAuthError("interactive_owner_confirmation_required")
         identity = resolve_function(function)
@@ -469,7 +501,9 @@ class Management:
         )
         return {**result, "function": self._summary(current)}, 0
 
-    def import_examples(self, function, path, *, replace=False):
+    def import_examples(
+        self, function: str, path: str | Path, *, replace: bool = False
+    ) -> tuple[dict[str, Any], int]:
         from .files import read_examples
 
         function = resolve_function(function)
@@ -512,17 +546,10 @@ class Management:
                 "evaluation_command_id": result["id"],
                 "state": result["state"],
             }, 0
-        source = detail["source"]
-        if source.get("version") != "function-spec-v1":
-            raise SeldonContractError("draft_evaluation_requires_full_source")
-        source = {
-            **source,
-            "evaluation": {**(source.get("evaluation") or {}), "examples": examples},
-        }
         result = self.request(
             "PATCH",
-            f"{FUNCTIONS}/{function}",
-            {"name": detail["name"], "expected_revision": detail["revision"], "source": source},
+            f"{FUNCTIONS}/{function}/draft-evaluation",
+            {"expected_revision": detail["revision"], "examples": examples},
         )
         self.association.update(
             evidence_digest=digest(examples),

@@ -70,6 +70,23 @@ then reconcile by explicitly supplying `import --function FUNCTION_UUID`. Source
 or imported evidence edits invalidate a saved recommendation. Historical reports
 use the saved or explicitly selected run, not whichever run is newest.
 
+## Evaluation evidence
+
+`examples import` validates every row before submission and requires `--replace`.
+Before a run exists it updates only draft evaluation through
+`PATCH /v1/seldon/functions/{id}/draft-evaluation`, preserving the SDK contract,
+source digest and active alias. The server checks the expected draft revision,
+owner/admin role, input/output schemas and duplicate rows. Repeating unchanged
+content does not create a new revision. After preparation the existing versioned
+run evaluation command is used instead.
+
+A single exported `kind: sdk` source can also include the server's optional
+`evaluation` definition (instructions, supported checks/metric and examples).
+Evaluation is outside the declared behavior digest. Re-syncing an unchanged
+declaration preserves separately imported evaluation evidence. These changes
+require the matching server update before using a new SDK build; deploy the
+server first. The published `0.1.0.dev0` package remains the earlier preview.
+
 ## Typed Python functions
 
 ```python
@@ -130,7 +147,10 @@ Sync declarations reuse a client per thread; async declarations reuse one per ev
 loop. Call `seldon.close()` / `await seldon.aclose()` at shutdown. Calling a sync
 Function inside an active event loop raises; declare it `async def` there.
 `call_with_info` returns `(result, metadata)` and `on_call=` receives the same safe
-metadata. `SELDON_MODE=reference` explicitly selects reference execution.
+metadata, once per logical call including input/configuration failures and local
+execution. Contract errors expose `param`; output-validation errors expose
+`execution_id`; server errors preserve `correlation_id` when supplied. Hook
+failures are logged without affecting the call. `SELDON_MODE=reference` explicitly selects reference execution.
 
 ```python
 from seldon_sdk.testing import stub
@@ -180,6 +200,7 @@ python -m pip install '.[dev]'
 python -m ruff check .
 python -m ruff format --check .
 python -m pytest -q
+python -m mypy --strict src/seldon_sdk scripts/typecheck_example.py
 python -m build
 python scripts/verify_wheel.py dist/*.whl
 ```
@@ -216,10 +237,10 @@ checks artifacts only. Preview `0.1.0.dev0` is published on PyPI.
 Before enabling publication, the package owner must register pending trusted
 publishers for project `seldon-sdk` on **both** registries:
 
-| Registry | GitHub owner | Repository | Workflow | Environment |
-| --- | --- | --- | --- | --- |
-| TestPyPI | Deep-Insight-Labs | seldon-python | release.yml | testpypi |
-| PyPI | Deep-Insight-Labs | seldon-python | release.yml | pypi |
+| Registry | GitHub owner      | Repository    | Workflow    | Environment |
+| -------- | ----------------- | ------------- | ----------- | ----------- |
+| TestPyPI | Deep-Insight-Labs | seldon-python | release.yml | testpypi    |
+| PyPI     | Deep-Insight-Labs | seldon-python | release.yml | pypi        |
 
 Create matching GitHub environments and set
 `SELDON_SDK_TESTPYPI_PUBLISH_ENABLED=true` only after TestPyPI registration.

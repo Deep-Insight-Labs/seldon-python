@@ -1,0 +1,8 @@
+{
+  "exporter_sha256": "b58ce2b44ca721832c1f76f1618557bad3ee5765c280067036483825e3c1b23e",
+  "path": "packages/seldon/tests/sdk_compat/fixtures/conformance.json",
+  "provenance": "Synthetic SDK-owned declarations, evaluated by the Seldon importer and renderer.",
+  "seldon_revision": "4a9e1d30503cd576ed167f7be4c452efdcf2a5fc",
+  "sha256": "ed3ae2a898b7623212a4144bf6ffc1d54021454009e226e233b3c3660a5fc0b6",
+  "version": "seldon-sdk-conformance-source-v1"
+}
